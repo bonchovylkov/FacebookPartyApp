@@ -3,14 +3,19 @@ package com.mentormate.academy.fbpartyapp;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.facebook.Session;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.FacebookLoginFragment;
+import com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants;
 
 
 public class MainActivity extends FragmentActivity {
 
+    private LoginButton loginBtn;
     private FacebookLoginFragment facebookLoginFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,18 @@ public class MainActivity extends FragmentActivity {
                     .beginTransaction()
                     .add(android.R.id.content, facebookLoginFragment)
                     .commit();
+
+//            loginBtn = (LoginButton) findViewById(R.id.authButton);
+//            loginBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+//                @Override
+//                public void onUserInfoFetched(GraphUser user) {
+//                    if (user != null) {
+//                        Log.d(Constants .LOG_DEBUG,"Hello, " + user.getName());
+//                    } else {
+//                        Log.d(Constants .LOG_DEBUG,"You are not logged");
+//                    }
+//                }
+//            });
         } else {
             // Or set the fragment from restored state info
             facebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()
