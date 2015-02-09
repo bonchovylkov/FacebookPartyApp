@@ -1,18 +1,34 @@
 package com.mentormate.academy.fbpartyapp;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.facebook.Session;
+import com.mentormate.academy.fbpartyapp.Fragments.FacebookLoginFragment;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
+    private FacebookLoginFragment facebookLoginFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            facebookLoginFragment = new FacebookLoginFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, facebookLoginFragment)
+                    .commit();
+        } else {
+            // Or set the fragment from restored state info
+            facebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()
+                    .findFragmentById(android.R.id.content);
+        }
     }
 
 
