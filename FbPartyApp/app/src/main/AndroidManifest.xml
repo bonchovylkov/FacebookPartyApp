@@ -42,6 +42,13 @@
             android:name=".Parties"
             android:label="@string/title_activity_parties" >
         </activity>
+
+        <provider
+            android:authorities="com.mentormate.academy.fbpartyapp.Events.EventsProvider"
+            android:name="com.mentormate.academy.fbpartyapp.Events.EventsProvider">
+
+        </provider>
+
     </application>
 
 </manifest>
