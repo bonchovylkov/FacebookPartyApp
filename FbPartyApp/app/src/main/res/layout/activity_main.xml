@@ -19,6 +19,16 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
+
+        />
+
+    <TextView
+        android:id="@+id/lbServiceResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="invisible"
         />
 

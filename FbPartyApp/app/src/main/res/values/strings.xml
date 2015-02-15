@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="app_id">333774683480727</string>
     <string name="title_facebook_login">Please login my party animal</string>
+    <string name="title_activity_parties">Parties</string>
 
 </resources>

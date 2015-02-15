@@ -2,37 +2,31 @@ package com.mentormate.academy.fbpartyapp.Fragments;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphObject;
-import com.facebook.model.GraphPlace;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.R;
+import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Student11 on 2/9/2015.
@@ -40,12 +34,23 @@ import java.util.List;
 public class FacebookLoginFragment extends Fragment {
 
     private TextView userInfoTextView;
+    private TextView lbServiceResult;
     private UiLifecycleHelper uiHelper;
+    private Context currentContext;
+
+    public FacebookLoginFragment() {
+    }
+
+    public FacebookLoginFragment(Context currentContext) {
+        this.currentContext = currentContext;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         userInfoTextView = (TextView) view.findViewById(R.id.userInfoTextView);
+        lbServiceResult=(TextView) view.findViewById(R.id.lbServiceResult);
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
 
@@ -99,47 +104,7 @@ public class FacebookLoginFragment extends Fragment {
         uiHelper.onSaveInstanceState(outState);
     }
 
-    //makes request to a certain id
-    private void getRequestData(final String inRequestId) {
-        // Create a new request for an HTTP GET with the
-        // request ID as the Graph path.
-        Request request = new Request(Session.getActiveSession(),
-                inRequestId, null, HttpMethod.GET, new Request.Callback() {
 
-            @Override
-            public void onCompleted(Response response) {
-                // Process the returned response
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                // Default message
-                String message = "Incoming request";
-                if (graphObject != null) {
-                    // Check if there is extra data
-
-                       // try {
-
-                            // about
-                            String about = String.valueOf( graphObject.getProperty("about"));
-
-                            String category =String.valueOf( graphObject.getProperty("category"));
-
-                            message = about + "\n\n" +
-                                    "category: " + category ;
-//                        } catch (JSONException e) {
-//                            message = "Error getting request info";
-//                        }
-                    } else if (error != null) {
-                        message = "Error getting request info";
-
-                }
-                Toast.makeText(getActivity().getApplicationContext(),
-                        message,
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-        // Execute the request asynchronously.
-        Request.executeBatchAsync(request);
-    }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
@@ -153,10 +118,18 @@ public class FacebookLoginFragment extends Fragment {
                     if (user != null) {
                         // Display the parsed user info
                         userInfoTextView.setVisibility(View.VISIBLE);
+                        lbServiceResult.setVisibility(View.VISIBLE);
 
                         userInfoTextView.setText(buildUserInfoDisplay(user));
-                        getRequestData("341486209377198");
-                        getRequestData("341486209377198/feed");
+
+                        Intent intent = new Intent("test");
+                        intent.putExtra("lbTest", "Resulttest");
+                        currentContext.sendBroadcast(intent);
+
+                       // startDownloadService();
+
+                       // getRequestData("341486209377198");
+                      //  getRequestData("341486209377198/feed");
                     }
                 }
             });
@@ -168,8 +141,11 @@ public class FacebookLoginFragment extends Fragment {
         } else if (state.isClosed()) {
             Log.i(Constants.LOG_DEBUG, "Logged out...");
             userInfoTextView.setVisibility(View.INVISIBLE);
+            lbServiceResult.setVisibility(View.INVISIBLE);
         }
     }
+
+
 
     private String buildUserInfoDisplay(GraphUser user) {
         StringBuilder userInfo = new StringBuilder("");
