@@ -25,6 +25,10 @@
             android:label="@string/title_facebook_login" >
         </activity>
 
+        <activity
+            android:name=".json_parsers.TestParsers"
+            android:label="test" >
+        </activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />

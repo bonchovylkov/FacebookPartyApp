@@ -35,6 +35,7 @@ public class MainActivity extends FragmentActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("lbTest")) {
                 startDownloadService();
+
             }
         }
     };

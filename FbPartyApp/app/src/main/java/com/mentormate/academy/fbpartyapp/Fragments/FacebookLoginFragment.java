@@ -20,8 +20,10 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants;
+import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
+import com.mentormate.academy.fbpartyapp.json_parsers.TestParsers;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -106,7 +108,7 @@ public class FacebookLoginFragment extends Fragment {
 
 
 
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+    private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
             Log.i(Constants.LOG_DEBUG, "Logged in...");
 
@@ -122,10 +124,16 @@ public class FacebookLoginFragment extends Fragment {
 
                         userInfoTextView.setText(buildUserInfoDisplay(user));
 
-                        Intent intent = new Intent("test");
-                        intent.putExtra("lbTest", "Resulttest");
-                        currentContext.sendBroadcast(intent);
+//                        Intent intent = new Intent("test");
+//                        intent.putExtra("lbTest", "Resulttest");
+//                        currentContext.sendBroadcast(intent);
 
+                       Bundle bundle = new Bundle();
+
+
+                        Intent intent = new Intent(currentContext, TestParsers.class);
+                        intent.putExtra("session", session);
+                        startActivity(intent);
                        // startDownloadService();
 
                        // getRequestData("341486209377198");
