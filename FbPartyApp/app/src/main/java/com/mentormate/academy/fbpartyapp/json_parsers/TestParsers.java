@@ -126,7 +126,7 @@ public class TestParsers extends ActionBarActivity {
                     message = about + "\n\n" +
                             "category: " + category ;
 
-                    Log.d(com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants.LOG_DEBUG, message);
+                    Log.d(Constants.LOG_DEBUG, message);
 
 //                        } catch (JSONException e) {
 //                            message = "Error getting request info";
