@@ -1,7 +1,9 @@
 package com.mentormate.academy.fbpartyapp.json_parsers;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,11 +40,23 @@ public class TestParsers extends ActionBarActivity {
     Session session;
 
     private int eventsFound = 0;
+    private long lastUpdate = 0;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_parsers);
+
+        sharedPreferences = getSharedPreferences("SETTINGS", Context.MODE_PRIVATE);
+        if(sharedPreferences.contains("last_update")) {
+            lastUpdate = sharedPreferences.getLong("last_update", lastUpdate);
+        }
+        Log.d(Constants.LOG_DEBUG, "lastUpdate:" + lastUpdate);
+
+        //DELETE THIS TO ENABLE lastUpdate functionality: get only posts after last download;
+        //lastUpdate = 0;
+        //Log.d(Constants.LOG_DEBUG, "lastUpdate (forced to 0):" + lastUpdate);
 
         //parseFeedJson("");
 
@@ -61,8 +75,9 @@ public class TestParsers extends ActionBarActivity {
 
         getRequestData(Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);
 
+        Cursor c = getContentResolver().query(Constants.URI, null, null, null, "");
         //Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "33"), null, null, null, "");
-        Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "event/1562382110671319"), null, null, null, "");
+        //Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "event/1562382110671319"), null, null, null, "");
 
         String result = "";
         if (!c.moveToFirst()) {
@@ -83,10 +98,23 @@ public class TestParsers extends ActionBarActivity {
         //set active session to our session!
         Log.d(Constants.LOG_DEBUG, "currentSession: " + session);
 
+        //params -> ?since=<unix timestamp of last update>
+        Bundle params = new Bundle();
+        params.putString(Constants.FB_FEED_SINCE_PARAM, "" + lastUpdate);
+
+        //update shared pref last update time
+        long unixTime = System.currentTimeMillis() / 1000L;
+        Log.d(Constants.LOG_DEBUG, "unixTime:" + unixTime);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("last_update", unixTime);
+        editor.commit();
+        Log.d(Constants.LOG_DEBUG, "last_update: " + lastUpdate);
+
         // Create a new request for an HTTP GET with the
         // request ID as the Graph path.
         Request request = new Request(session,
-                inRequestId, null, HttpMethod.GET, new Request.Callback() {
+                inRequestId, params, HttpMethod.GET, new Request.Callback() {
 
             @Override
             public void onCompleted(Response response) {
@@ -104,24 +132,11 @@ public class TestParsers extends ActionBarActivity {
                     parseFeedJson(graphResult.toString());
 
                     Log.d(Constants.LOG_DEBUG, graphResult.toString());
-                    // Check if there is extra data
-
-                    /*String about = String.valueOf( graphObject.getProperty("about"));
-                    String category =String.valueOf( graphObject.getProperty("category"));*/
-
-                    /*message = about + "\n\n" +
-                            "category: " + category ;*/
-
-                    Log.d(Constants.LOG_DEBUG, message);
 
                 } else if (error != null) {
-                    message = "Error getting request info";
+                    Log.d(Constants.LOG_DEBUG, "graphObject is null!");
 
                 }
-                //debugging
-                /*Toast.makeText(getApplicationContext(),
-                        message,
-                        Toast.LENGTH_LONG).show();*/
             }
         });
         // Execute the request asynchronously.
@@ -258,7 +273,7 @@ public class TestParsers extends ActionBarActivity {
                 FacebookRequestError error = response.getError();
 
                 // Default message
-                String message = "Incoming request";
+                //String message = "Incoming request";
 
                 if (graphObject != null) {
 
@@ -310,9 +325,9 @@ public class TestParsers extends ActionBarActivity {
                         try {
                             JSONObject cover = graphResult.getJSONObject("cover");
 
-                            if( cover.has("source") )
+                            if( cover.has("id") )
                             {
-                                values.put(Constants.DB_COVER, cover.getString("source"));
+                                values.put(Constants.DB_COVER, cover.getString("id"));
                             }
 
                         } catch (JSONException e) {
@@ -334,7 +349,9 @@ public class TestParsers extends ActionBarActivity {
                             "category: " + category ;*/
 
                 } else if (error != null) {
-                    message = "Error getting request info";
+                    //message = "Error getting request info";
+
+                    Log.d(Constants.LOG_DEBUG, "Error getting request info");
 
                 }
                 //debugging
