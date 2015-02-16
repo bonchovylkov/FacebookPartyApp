@@ -1,11 +1,11 @@
 package com.mentormate.academy.fbpartyapp.json_parsers;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TestParsers extends ActionBarActivity {
+public class TestParsers extends Activity {
 
     private Pattern pattern = Pattern.compile("^https?://[^/]+/([^/]+)/([^/]+)/.*");
     private String segmentOne, eventID;

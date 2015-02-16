@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.mentormate.academy.fbpartyapp.Fragments.AllEventsFragment;
 import com.mentormate.academy.fbpartyapp.Fragments.TodayEventsFragment;
@@ -22,6 +23,7 @@ public class Parties extends Activity {
     AllEventsFragment allEventsFragment = new AllEventsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parties);
         setTabs();
@@ -32,8 +34,11 @@ public class Parties extends Activity {
 
 
     private void setTabs() {
+
         ActionBar actionBar = getActionBar();
+        Log.d(Constants.LOG_DEBUG,"actionBar " + actionBar);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 
         tabTodayEvents = actionBar.newTab();
         tabTodayEvents.setText("Cinemas");

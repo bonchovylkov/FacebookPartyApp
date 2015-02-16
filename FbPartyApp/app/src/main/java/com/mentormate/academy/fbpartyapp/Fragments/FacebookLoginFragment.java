@@ -132,8 +132,8 @@ public class FacebookLoginFragment extends Fragment {
                        Bundle bundle = new Bundle();
 
 
-                        Intent intent = new Intent(currentContext, TestParsers.class);
-                        intent.putExtra("session", session);
+                        Intent intent = new Intent(currentContext, Parties.class);
+                       // intent.putExtra("session", session);
                         startActivity(intent);
                        // startDownloadService();
 

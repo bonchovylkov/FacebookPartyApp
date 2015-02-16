@@ -34,12 +34,12 @@ public class AllEventsFragment extends ListFragment  {
 
         super.onActivityCreated(savedInstanceState);
 
-        Log.d(Constants.LOG_DEBUG, "TitlesFragment:onActivityCreated");
+        Log.d(Constants.LOG_DEBUG, "AllEventsFragment:onActivityCreated");
 
 
 
         // Populate list with all the cinemas that the adapted has
-        setListAdapter(new AllEventsAdapter());
+        setListAdapter(new AllEventsAdapter(getActivity()));
 
 
 
