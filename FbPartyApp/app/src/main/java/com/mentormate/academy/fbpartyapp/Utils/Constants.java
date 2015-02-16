@@ -11,6 +11,7 @@ public class Constants {
 
     public static final String FB_EVENT_FIELDS_PARAM = "fields";
     public static final String FB_EVENT_FIELDS_LIST = "name,description,start_time,venue,cover";
+    public static final String FB_FEED_SINCE_PARAM = "since";
 
     public static final String EVENT_URI_SEGMENT = "events";
 
