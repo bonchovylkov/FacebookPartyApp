@@ -1,18 +1,96 @@
 package com.mentormate.academy.fbpartyapp;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mentormate.academy.fbpartyapp.Fragments.AllEventsFragment;
+import com.mentormate.academy.fbpartyapp.Fragments.TodayEventsFragment;
+import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
-public class Parties extends ActionBarActivity {
 
+public class Parties extends Activity {
+
+    ActionBar.Tab tabTodayEvents;
+    ActionBar.Tab tabAllEvents;
+
+    TodayEventsFragment todayEventsFragment = new TodayEventsFragment();
+    AllEventsFragment allEventsFragment = new AllEventsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parties);
+        setTabs();
     }
+
+
+
+
+
+    private void setTabs() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        tabTodayEvents = actionBar.newTab();
+        tabTodayEvents.setText("Cinemas");
+        tabTodayEvents.setTabListener(new ActionBar.TabListener() {
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+                fragmentTransaction.replace(R.id.tapsLayout, todayEventsFragment);
+
+
+                //  FrameLayout layout =(FrameLayout) findViewById( R.id.mainLayout);
+                //  FrameLayout listCinemas = (FrameLayout)  layout.findViewById(R.id.cinemasLayout);
+
+                //  listCinemas.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+            }
+
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+            }
+        });
+
+        actionBar.addTab(tabTodayEvents);
+
+        tabAllEvents = actionBar.newTab();
+        tabAllEvents.setText("Movies");
+        tabAllEvents.setTabListener(new ActionBar.TabListener() {
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+
+                fragmentTransaction.replace(R.id.tapsLayout, allEventsFragment);
+
+
+                Log.d(Constants.LOG_DEBUG, String.valueOf(todayEventsFragment.getmCurCheckPosition()));
+
+            }
+
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+            }
+
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+            }
+        });
+        actionBar.addTab(tabAllEvents);
+    }
+
 
 
     @Override

@@ -17,8 +17,9 @@ import android.widget.TextView;
 
 import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.FacebookLoginFragment;
-import com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants;
+
 import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
+import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

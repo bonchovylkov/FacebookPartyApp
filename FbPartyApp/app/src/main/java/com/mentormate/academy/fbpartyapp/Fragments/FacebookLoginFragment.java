@@ -19,10 +19,11 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants;
+
 import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
+import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.json_parsers.TestParsers;
 
 import org.json.JSONArray;

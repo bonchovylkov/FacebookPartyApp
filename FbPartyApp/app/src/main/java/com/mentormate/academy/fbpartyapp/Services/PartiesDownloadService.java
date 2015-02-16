@@ -12,7 +12,8 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
-import com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants;
+import com.mentormate.academy.fbpartyapp.Utils.Constants;
+
 
 import org.json.JSONObject;
 
