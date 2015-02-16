@@ -19,7 +19,13 @@ import com.mentormate.academy.fbpartyapp.Utils.Constants;
             " ( " +
                 Constants.DB_ID  + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 Constants.DB_EVENT_ID + " BIGINT NOT NULL, " +
-                Constants.DB_URL + " TEXT NOT NULL" +
+                Constants.DB_URL + " TEXT NOT NULL, " +
+                Constants.DB_START_TIME + " TEXT, " +
+                Constants.DB_NAME + " TEXT, " +
+                Constants.DB_DESCRIPTION + " TEXT, " +
+                Constants.DB_COVER + " TEXT, " +
+                Constants.DB_LAT + " REAL, " +
+                Constants.DB_LON + " REAL" +
             " );"
             ;
 

@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -20,7 +20,6 @@ import com.facebook.Session;
 import com.facebook.model.GraphObject;
 import com.mentormate.academy.fbpartyapp.MainActivity;
 import com.mentormate.academy.fbpartyapp.R;
-import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 import org.json.JSONArray;
@@ -80,14 +79,6 @@ public class TestParsers extends ActionBarActivity {
         }
     }
 
-    private void startDownloadService() {
-        /*Intent intent = new Intent(this, PartiesDownloadService.class);
-        intent.setAction(PartiesDownloadService.ACTION_ASYNC);
-        intent.putExtra(PartiesDownloadService.GRAPH_API_ID_LABEL, com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);
-        intent.putExtra("session", session);
-        startService(intent);*/
-    }
-
     private void getRequestData(final String inRequestId) {
         //set active session to our session!
         Log.d(Constants.LOG_DEBUG, "currentSession: " + session);
@@ -103,10 +94,9 @@ public class TestParsers extends ActionBarActivity {
                 GraphObject graphObject = response.getGraphObject();
 
                 FacebookRequestError error = response.getError();
-               // Log.d(com.mentormate.academy.fbpartyapp.Fragments.Utils.Constants.LOG_DEBUG, "error: " + error.getErrorMessage());
 
                 // Default message
-                String message = "Incoming request";
+                String message = "getRequestData onCompleted!";
                 if (graphObject != null) {
 
                     JSONObject graphResult = graphObject.getInnerJSONObject();
@@ -116,36 +106,37 @@ public class TestParsers extends ActionBarActivity {
                     Log.d(Constants.LOG_DEBUG, graphResult.toString());
                     // Check if there is extra data
 
-                    // try {
+                    /*String about = String.valueOf( graphObject.getProperty("about"));
+                    String category =String.valueOf( graphObject.getProperty("category"));*/
 
-                    // about
-                    String about = String.valueOf( graphObject.getProperty("about"));
-
-                    String category =String.valueOf( graphObject.getProperty("category"));
-
-                    message = about + "\n\n" +
-                            "category: " + category ;
+                    /*message = about + "\n\n" +
+                            "category: " + category ;*/
 
                     Log.d(Constants.LOG_DEBUG, message);
 
-//                        } catch (JSONException e) {
-//                            message = "Error getting request info";
-//                        }
                 } else if (error != null) {
                     message = "Error getting request info";
 
                 }
-                Toast.makeText(getApplicationContext(),
+                //debugging
+                /*Toast.makeText(getApplicationContext(),
                         message,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
             }
         });
         // Execute the request asynchronously.
         Request.executeBatchAsync(request);
-        Log.d(Constants.LOG_DEBUG, "Request.executeBatchAsync(request): " + Request.executeBatchAsync(request).toString());
+
+        //Log.d(Constants.LOG_DEBUG, "Request.executeBatchAsync(request): " + Request.executeBatchAsync(request).toString());
     }
 
     private void parseFeedJson(String jsonString) {
+        //delete DB (testing purposes)
+
+        int count = getContentResolver().delete(Constants.URI, null, null);
+        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+
+        Log.d(Constants.LOG_DEBUG, "jsonString: " + jsonString);
 
         //LOCAL JSON PARSING TEST
         InputStream inputStream;
@@ -224,16 +215,24 @@ public class TestParsers extends ActionBarActivity {
                     //if the first part is events -> the second is eventID!
                     eventID = matcher.group(2);
 
-                    Log.d(Constants.LOG_DEBUG, "Message: " + message + " segmentOne: " + segmentOne + " eventID: " + eventID);
+                    //Log.d(Constants.LOG_DEBUG, "Message: " + message + " segmentOne: " + segmentOne + " eventID: " + eventID);
 
-                    //TODO save in DB
-                    ContentValues values = new ContentValues();
-                    values.put(Constants.DB_EVENT_ID, eventID);
-                    values.put(Constants.DB_URL, message);
+                    //save in DB
 
-                    Log.d(Constants.LOG_DEBUG, "addEvent values: " + values.toString());
-                    Uri uri = getContentResolver().insert(Constants.URI, values);
-                    Log.d(Constants.LOG_DEBUG, "addEvent uri: " + uri.toString());
+                    Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "event/" + eventID), null, null, null, "");
+                    if( !c.moveToFirst() )
+                    {
+                        //event is not found in DB
+                        ContentValues values = new ContentValues();
+                        values.put(Constants.DB_EVENT_ID, eventID);
+                        values.put(Constants.DB_URL, message);
+
+                        //Log.d(Constants.LOG_DEBUG, "addEvent values: " + values.toString());
+                        Uri uri = getContentResolver().insert(Constants.URI, values);
+                        //Log.d(Constants.LOG_DEBUG, "addEvent uri: " + uri.toString());
+
+                        updateEventData(eventID);
+                    }
 
                     return true;
                 }
@@ -241,6 +240,112 @@ public class TestParsers extends ActionBarActivity {
         }
 
         return false;
+    }
+
+    private void updateEventData(final String eventID) {
+
+        Bundle params = new Bundle();
+        params.putString(Constants.FB_EVENT_FIELDS_PARAM, Constants.FB_EVENT_FIELDS_LIST);
+
+        Request request = new Request(session,
+                eventID , params, HttpMethod.GET, new Request.Callback() {
+
+            @Override
+            public void onCompleted(Response response) {
+                // Process the returned response
+                GraphObject graphObject = response.getGraphObject();
+
+                FacebookRequestError error = response.getError();
+
+                // Default message
+                String message = "Incoming request";
+
+                if (graphObject != null) {
+
+                    JSONObject graphResult = graphObject.getInnerJSONObject();
+
+                    Log.d(Constants.LOG_DEBUG, graphResult.toString());
+
+                    ContentValues values = new ContentValues();
+                    if( graphResult.has("name")) {
+                        try {
+                            values.put(Constants.DB_NAME, graphResult.getString("name"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if( graphResult.has("description")) {
+                        try {
+                            values.put(Constants.DB_DESCRIPTION, graphResult.getString("description"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if( graphResult.has("start_time")) {
+                        try {
+                            values.put(Constants.DB_START_TIME, graphResult.getString("start_time"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if( graphResult.has("venue")) {
+                        try {
+                            JSONObject venue = graphResult.getJSONObject("venue");
+
+                            if( venue.has("latitude") && venue.has("longitude"))
+                            {
+                                values.put(Constants.DB_LAT, venue.getString("latitude"));
+                                values.put(Constants.DB_LON, venue.getString("longitude"));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if( graphResult.has("cover")) {
+                        try {
+                            JSONObject cover = graphResult.getJSONObject("cover");
+
+                            if( cover.has("source") )
+                            {
+                                values.put(Constants.DB_COVER, cover.getString("source"));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    Log.d(Constants.LOG_DEBUG, "Update values: " + values.toString());
+                    int count = getContentResolver().update(Uri.withAppendedPath(Constants.URI, "event/" + eventID), values, null, null);
+                    Log.d(Constants.LOG_DEBUG, "Updated count: " + count);
+
+
+                    // Check if there is extra data
+
+                    /*String about = String.valueOf( graphObject.getProperty("about"));
+                    String category =String.valueOf( graphObject.getProperty("category"));*/
+
+                    /*message = about + "\n\n" +
+                            "category: " + category ;*/
+
+                } else if (error != null) {
+                    message = "Error getting request info";
+
+                }
+                //debugging
+                /*Toast.makeText(getApplicationContext(),
+                        message,
+                        Toast.LENGTH_LONG).show();*/
+            }
+        });
+        // Execute the request asynchronously.
+        Request.executeBatchAsync(request);
+
     }
 
 
