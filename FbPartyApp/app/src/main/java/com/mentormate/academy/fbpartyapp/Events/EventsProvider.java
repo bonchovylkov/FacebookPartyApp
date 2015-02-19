@@ -70,7 +70,7 @@ public class EventsProvider extends ContentProvider {
                 Date date = formatter.parse(testDate);
                 System.out.println(date);*/
 
-                queryBuilder.appendWhere( "DATE(" + Constants.DB_START_TIME + ")!=" + formatter.format(new Date()));
+                queryBuilder.appendWhere( "DATE(" + Constants.DB_START_TIME + ")!='" + formatter.format(new Date())+"'");
                 break;
             case 2:
                 queryBuilder.appendWhere( Constants.DB_ID + "=" + uri.getLastPathSegment());
@@ -79,7 +79,7 @@ public class EventsProvider extends ContentProvider {
                 queryBuilder.appendWhere( Constants.DB_EVENT_ID + "=" + uri.getLastPathSegment());
                 break;
             case 4:
-                queryBuilder.appendWhere( "DATE(" + Constants.DB_START_TIME + ")=" + formatter.format(new Date()));
+                queryBuilder.appendWhere( "DATE(" + Constants.DB_START_TIME + ")='" + formatter.format(new Date())+"'");
                 break;
 
             default:
