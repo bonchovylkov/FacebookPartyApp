@@ -3,14 +3,21 @@ package com.mentormate.academy.fbpartyapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.FrameLayout;
 
 import com.mentormate.academy.fbpartyapp.Fragments.AllEventsFragment;
 import com.mentormate.academy.fbpartyapp.Fragments.TodayEventsFragment;
+import com.mentormate.academy.fbpartyapp.Services.EventsDownloadService;
+import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 
@@ -19,19 +26,38 @@ public class Parties extends Activity {
     ActionBar.Tab tabTodayEvents;
     ActionBar.Tab tabAllEvents;
 
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra(EventsDownloadService.KEY_MESSAGE)) {
+                Log.d(Constants.LOG_DEBUG, "" + intent.getIntExtra(EventsDownloadService.KEY_MESSAGE, 0));
+
+                FrameLayout allEvents = (FrameLayout) findViewById(R.id.tabsLayout);
+                allEvents.invalidate();
+
+            }
+        }
+    };
+
     TodayEventsFragment todayEventsFragment = new TodayEventsFragment();
     AllEventsFragment allEventsFragment = new AllEventsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //download events info
+        Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
+        eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
+        startService(eventsDownloadIntent);
+
+        //register receiver
+        registerReceiver(receiver,
+                new IntentFilter(EventsDownloadService.BROADCAST_RESULT));
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parties);
+        setContentView(R.layout.fragment_events_main);
         setTabs();
+
     }
-
-
-
-
 
     private void setTabs() {
 
@@ -41,12 +67,12 @@ public class Parties extends Activity {
 
 
         tabTodayEvents = actionBar.newTab();
-        tabTodayEvents.setText("Cinemas");
+        tabTodayEvents.setText("Today");
         tabTodayEvents.setTabListener(new ActionBar.TabListener() {
             @Override
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
-                fragmentTransaction.replace(R.id.tapsLayout, todayEventsFragment);
+                fragmentTransaction.replace(R.id.tabsLayout, todayEventsFragment);
 
 
                 //  FrameLayout layout =(FrameLayout) findViewById( R.id.mainLayout);
@@ -70,13 +96,13 @@ public class Parties extends Activity {
         actionBar.addTab(tabTodayEvents);
 
         tabAllEvents = actionBar.newTab();
-        tabAllEvents.setText("Movies");
+        tabAllEvents.setText("Other Events");
         tabAllEvents.setTabListener(new ActionBar.TabListener() {
             @Override
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
 
-                fragmentTransaction.replace(R.id.tapsLayout, allEventsFragment);
+                fragmentTransaction.replace(R.id.tabsLayout, allEventsFragment);
 
 
                 Log.d(Constants.LOG_DEBUG, String.valueOf(todayEventsFragment.getmCurCheckPosition()));

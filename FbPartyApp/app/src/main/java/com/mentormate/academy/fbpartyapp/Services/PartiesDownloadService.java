@@ -130,6 +130,12 @@ public class PartiesDownloadService extends Service {
 
 
     private class WorkerThread extends Thread {
+
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize();
+        }
+
         @Override
         public void run() {
             super.run();

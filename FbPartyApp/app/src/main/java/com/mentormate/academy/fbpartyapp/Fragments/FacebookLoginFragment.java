@@ -24,6 +24,7 @@ import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
+import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 import com.mentormate.academy.fbpartyapp.json_parsers.TestParsers;
 
 import org.json.JSONArray;
@@ -110,6 +111,9 @@ public class FacebookLoginFragment extends Fragment {
 
 
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
+
+       SingletonSession.getInstance().setCurrentSession(session);
+
         if (state.isOpened()) {
             Log.i(Constants.LOG_DEBUG, "Logged in...");
 

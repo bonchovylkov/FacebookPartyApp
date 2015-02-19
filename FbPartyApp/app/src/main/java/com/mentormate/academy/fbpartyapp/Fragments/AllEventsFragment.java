@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.mentormate.academy.fbpartyapp.CustomAdapters.AllEventsAdapter;
+import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
+import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 
@@ -84,18 +86,19 @@ public class AllEventsFragment extends ListFragment  {
 
         Log.d(Constants.LOG_DEBUG, "onListItemClick position is" + position);
 
+        AllEventsAdapter adapter = new AllEventsAdapter(this.getActivity());
+        Event event= adapter.getItem(position);
 
-//        AllEventsAdapter adapter = new AllEventsAdapter(this.getActivity());
-//        Cinema cinema = adapter.getItem(position);
-//        Intent intent = new Intent();
-//        intent.setClass(getActivity(), CinemaDetails.class);
-//        intent.putExtra("SelectedCinemaCode", position);
-//        intent.putExtra("Address", cinema.getAddress());
-//        intent.putExtra("CinemaName", cinema.getTitle());
-//        intent.putExtra("WorkingHours",cinema.getWorkingTime());
-//        intent.putExtra("PictureOne",cinema.getPictureCode());
-//        intent.putExtra("PictureTwo",cinema.getPictureCodeSecond());
-//        startActivity(intent);
+        Intent intent = new Intent();
+//        intent.setClass(getActivity(), MovieDetails.class);
+//        intent.putExtra("SelectedMovieCode", position);
+//        intent.putExtra("MovieName", movie.getName());
+//        intent.putExtra("Cast", movie.getCast());
+//        intent.putExtra("CinemasPlayedIn",movie.getPlayedInCinemas());
+//        intent.putExtra("MoviePicture",movie.getPicture());
+//        intent.putExtra("HasSeats",movie.getHasTickets());
+
+        startActivity(intent);
     }
 
     private void setSelectedItemColor(ListView l, View v,String index) {

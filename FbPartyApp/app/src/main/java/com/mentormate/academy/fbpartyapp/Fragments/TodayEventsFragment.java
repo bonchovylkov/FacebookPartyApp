@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
+import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
+import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 
@@ -78,9 +80,10 @@ public class TodayEventsFragment extends ListFragment {
         setSelectedItemColor(l, v,null);
 
 
-//        MovieAdapter adapter = new MovieAdapter(this.getActivity(),getSelectedCinemaIndex());
-//        Movie movie = adapter.getItem(position);
-//        Intent intent = new Intent();
+          TodayEventsAdapter adapter = new TodayEventsAdapter(this.getActivity());
+           Event event= adapter.getItem(position);
+
+         Intent intent = new Intent();
 //        intent.setClass(getActivity(), MovieDetails.class);
 //        intent.putExtra("SelectedMovieCode", position);
 //        intent.putExtra("MovieName", movie.getName());
@@ -89,7 +92,7 @@ public class TodayEventsFragment extends ListFragment {
 //        intent.putExtra("MoviePicture",movie.getPicture());
 //        intent.putExtra("HasSeats",movie.getHasTickets());
 
-      //  startActivity(intent);
+          startActivity(intent);
 
     }
 

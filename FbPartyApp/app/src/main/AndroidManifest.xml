@@ -34,12 +34,9 @@
             android:value="@string/app_id" />
 
         <service
-            android:name=".Services.PartiesDownloadService"
-            android:debuggable="true"
+            android:name=".Services.EventsDownloadService"
             android:enabled="true"
-            android:exported="false"
-            android:process=":other"
-            tools:ignore="HardcodedDebugMode" >
+            android:exported="false" >
         </service>
 
         <activity
