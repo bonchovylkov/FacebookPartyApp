@@ -2,6 +2,9 @@ package com.mentormate.academy.fbpartyapp.Utils;
 
 import android.net.Uri;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Bon on 2/15/2015.
  */
@@ -32,5 +35,10 @@ public class Constants {
     public static final String DB_LON       = "longitude";
     public static final String DB_COVER     = "cover";
     public static final String DB_DESCRIPTION      = "description";
+
+
+
+
+    public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 }

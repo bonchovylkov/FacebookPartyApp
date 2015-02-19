@@ -43,6 +43,10 @@ public class Parties extends Activity {
     AllEventsFragment allEventsFragment = new AllEventsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        int count = getContentResolver().delete(Constants.URI, null, null);
+        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+
         //download events info
         Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
         eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);

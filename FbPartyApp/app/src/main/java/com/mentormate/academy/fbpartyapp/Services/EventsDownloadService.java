@@ -50,7 +50,7 @@ public class EventsDownloadService extends Service {
 
     //private DateFormat formatter = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
     private String datePattern = "yyyy-MM-dd'T'HH:mm:ssZ";
-    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -287,7 +287,7 @@ public class EventsDownloadService extends Service {
                         try {
                             String start_time = graphResult.getString("start_time");
                             Date date = new SimpleDateFormat(datePattern).parse(start_time);
-                            values.put(Constants.DB_START_TIME, formatter.format(date) );
+                            values.put(Constants.DB_START_TIME, Constants.formatter.format(date) );
                             //Log.d(Constants.LOG_DEBUG, "start_time: " + formatter.format(date));
                         } catch (JSONException e) {
                             //Log.d(Constants.LOG_DEBUG, "start_time json error " );
