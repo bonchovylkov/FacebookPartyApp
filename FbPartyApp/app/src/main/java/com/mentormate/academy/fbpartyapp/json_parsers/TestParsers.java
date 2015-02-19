@@ -53,7 +53,6 @@ public class TestParsers extends Activity {
         Log.d(Constants.LOG_DEBUG, "lastUpdate:" + lastUpdate);
 
 
-
         //int count = getContentResolver().delete(Constants.URI, null, null);
         //Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
 
@@ -85,6 +84,9 @@ public class TestParsers extends Activity {
         getRequestData(Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);*/
 
         Cursor c = getContentResolver().query(Constants.URI, null, null, null, "");
+
+        //Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "events_today"), null, null, null, "");
+
         //Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "33"), null, null, null, "");
         //Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "event/1562382110671319"), null, null, null, "");
 
