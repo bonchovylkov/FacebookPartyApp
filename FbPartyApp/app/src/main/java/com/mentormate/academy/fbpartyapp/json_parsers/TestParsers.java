@@ -3,7 +3,6 @@ package com.mentormate.academy.fbpartyapp.json_parsers;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,7 +19,6 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
-import com.mentormate.academy.fbpartyapp.MainActivity;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
@@ -54,13 +52,24 @@ public class TestParsers extends Activity {
         }
         Log.d(Constants.LOG_DEBUG, "lastUpdate:" + lastUpdate);
 
+
+
+        //int count = getContentResolver().delete(Constants.URI, null, null);
+        //Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+
+        //download events info
+        /*Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
+        eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
+        startService(eventsDownloadIntent);*/
+
+
         //DELETE THIS TO ENABLE lastUpdate functionality: get only posts after last download;
         //lastUpdate = 0;
         //Log.d(Constants.LOG_DEBUG, "lastUpdate (forced to 0):" + lastUpdate);
 
         //parseFeedJson("");
 
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         if( intent != null && intent.hasExtra("session") )
         {
             session = (Session) intent.getSerializableExtra("session");
@@ -73,7 +82,7 @@ public class TestParsers extends Activity {
             startActivity(i);
         }
 
-        getRequestData(Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);
+        getRequestData(Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);*/
 
         Cursor c = getContentResolver().query(Constants.URI, null, null, null, "");
         //Cursor c = getContentResolver().query(Uri.withAppendedPath(Constants.URI, "33"), null, null, null, "");
@@ -87,7 +96,8 @@ public class TestParsers extends Activity {
                 result =
                         " id " +  c.getString(c.getColumnIndex(Constants.DB_ID)) +
                         " has event id: " + c.getString(c.getColumnIndex(Constants.DB_EVENT_ID)) +
-                        " has url: " + c.getString(c.getColumnIndex(Constants.DB_URL));
+                        " has url: " + c.getString(c.getColumnIndex(Constants.DB_URL)) +
+                        " has start time: " + c.getString(c.getColumnIndex(Constants.DB_START_TIME));
                 Log.d(Constants.LOG_DEBUG, result);
             } while (c.moveToNext());
 
@@ -124,7 +134,6 @@ public class TestParsers extends Activity {
                 FacebookRequestError error = response.getError();
 
                 // Default message
-                String message = "getRequestData onCompleted!";
                 if (graphObject != null) {
 
                     JSONObject graphResult = graphObject.getInnerJSONObject();
@@ -153,7 +162,7 @@ public class TestParsers extends Activity {
 
         Log.d(Constants.LOG_DEBUG, "jsonString: " + jsonString);
 
-        //LOCAL JSON PARSING TEST
+        //LOCAL JSON PARSING TEST -> if no string is supplied
         InputStream inputStream;
         if(jsonString.equals("")) {
             try {
@@ -219,6 +228,7 @@ public class TestParsers extends Activity {
     private boolean checkCommentForEventLink(String message) {
         //valid url
         if (Patterns.WEB_URL.matcher(message).matches() ) {
+
             //look for facebook.com/events
             Matcher matcher = pattern.matcher(message);
             if( matcher.matches() )
@@ -335,29 +345,17 @@ public class TestParsers extends Activity {
                         }
                     }
 
-                    Log.d(Constants.LOG_DEBUG, "Update values: " + values.toString());
+                    //Log.d(Constants.LOG_DEBUG, "Update values: " + values.toString());
+
                     int count = getContentResolver().update(Uri.withAppendedPath(Constants.URI, "event/" + eventID), values, null, null);
                     Log.d(Constants.LOG_DEBUG, "Updated count: " + count);
 
-
                     // Check if there is extra data
 
-                    /*String about = String.valueOf( graphObject.getProperty("about"));
-                    String category =String.valueOf( graphObject.getProperty("category"));*/
-
-                    /*message = about + "\n\n" +
-                            "category: " + category ;*/
 
                 } else if (error != null) {
-                    //message = "Error getting request info";
-
                     Log.d(Constants.LOG_DEBUG, "Error getting request info");
-
                 }
-                //debugging
-                /*Toast.makeText(getApplicationContext(),
-                        message,
-                        Toast.LENGTH_LONG).show();*/
             }
         });
         // Execute the request asynchronously.

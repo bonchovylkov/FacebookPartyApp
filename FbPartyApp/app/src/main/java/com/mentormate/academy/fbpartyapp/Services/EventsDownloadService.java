@@ -25,7 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +47,10 @@ public class EventsDownloadService extends Service {
     private long lastUpdate = 0;
     private SharedPreferences sharedPreferences;
     private String segmentOne, eventID;
+
+    //private DateFormat formatter = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
+    private String datePattern = "yyyy-MM-dd'T'HH:mm:ssZ";
+    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -88,6 +95,7 @@ public class EventsDownloadService extends Service {
         //params -> ?since=<unix timestamp of last update>
         Bundle params = new Bundle();
         //TO DO -> remove after testing
+        lastUpdate = 0;
         if(lastUpdate != 0) {
             params.putString(Constants.FB_FEED_SINCE_PARAM, "" + lastUpdate);
         }
@@ -114,7 +122,7 @@ public class EventsDownloadService extends Service {
 
                     parseFeedJson(graphResult.toString());
 
-                    Log.d(Constants.LOG_DEBUG, graphResult.toString());
+                    //Log.d(Constants.LOG_DEBUG, graphResult.toString());
                     setLastUpdateTime();
 
                     Intent intent = new Intent(BROADCAST_RESULT);
@@ -277,8 +285,15 @@ public class EventsDownloadService extends Service {
 
                     if( graphResult.has("start_time")) {
                         try {
-                            values.put(Constants.DB_START_TIME, graphResult.getString("start_time"));
+                            String start_time = graphResult.getString("start_time");
+                            Date date = new SimpleDateFormat(datePattern).parse(start_time);
+                            values.put(Constants.DB_START_TIME, formatter.format(date) );
+                            //Log.d(Constants.LOG_DEBUG, "start_time: " + formatter.format(date));
                         } catch (JSONException e) {
+                            //Log.d(Constants.LOG_DEBUG, "start_time json error " );
+                            e.printStackTrace();
+                        } catch (ParseException e) {
+                            //Log.d(Constants.LOG_DEBUG, "start_time parse error " );
                             e.printStackTrace();
                         }
                     }

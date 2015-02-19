@@ -10,9 +10,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -22,6 +26,7 @@ public class EventsProvider extends ContentProvider {
 
     private SQLiteDatabase db;
     private DBHelper dbHelper;
+    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     // projection map for a query
     private static HashMap<String, String> EventMap;
@@ -48,6 +53,7 @@ public class EventsProvider extends ContentProvider {
          */
         uriMatcher.addURI(Constants.AUTHORITY, Constants.DB_DBNAME + "/#", 2);
         uriMatcher.addURI(Constants.AUTHORITY, Constants.DB_DBNAME + "/event/#", 3);
+        uriMatcher.addURI(Constants.AUTHORITY, Constants.DB_DBNAME + "/events_today/", 4);
     }
 
     @Override
@@ -59,7 +65,12 @@ public class EventsProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             // maps all database column names
             case 1:
-                queryBuilder.setProjectionMap(EventMap);
+                /*queryBuilder.setProjectionMap(EventMap);
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
+                Date date = formatter.parse(testDate);
+                System.out.println(date);*/
+
+                queryBuilder.appendWhere( "DATE(" + Constants.DB_START_TIME + ")!=" + formatter.format(new Date()));
                 break;
             case 2:
                 queryBuilder.appendWhere( Constants.DB_ID + "=" + uri.getLastPathSegment());
@@ -67,6 +78,10 @@ public class EventsProvider extends ContentProvider {
             case 3:
                 queryBuilder.appendWhere( Constants.DB_EVENT_ID + "=" + uri.getLastPathSegment());
                 break;
+            case 4:
+                queryBuilder.appendWhere( "DATE(" + Constants.DB_START_TIME + ")=" + formatter.format(new Date()));
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -82,6 +97,7 @@ public class EventsProvider extends ContentProvider {
         }
 
         Cursor cursor = queryBuilder.query(db, projection, selection , selectionArgs, null, null, sortOrder);
+        Log.d(Constants.LOG_DEBUG, "queryBuilder query: " + queryBuilder.buildQuery(projection, selection, "", null, sortOrder, null));
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
