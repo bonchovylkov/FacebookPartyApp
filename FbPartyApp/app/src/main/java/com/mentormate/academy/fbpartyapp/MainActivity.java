@@ -31,15 +31,15 @@ public class MainActivity extends FragmentActivity {
     private FacebookLoginFragment facebookLoginFragment;
     private TextView lbServiceResult;
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra("lbTest")) {
-                startDownloadService();
-
-            }
-        }
-    };
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (intent.hasExtra("lbTest")) {
+//                startDownloadService();
+//
+//            }
+//        }
+//    };
 
 
     private void startDownloadService() {
@@ -74,11 +74,9 @@ public class MainActivity extends FragmentActivity {
 
         }*/
 
-        registerReceiver(receiver,
-                new IntentFilter("test"));
 
-        registerReceiver(receiver,
-                new IntentFilter(PartiesDownloadService.BROADCAST_RESULT));
+//        registerReceiver(receiver,
+//                new IntentFilter(PartiesDownloadService.BROADCAST_RESULT));
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
