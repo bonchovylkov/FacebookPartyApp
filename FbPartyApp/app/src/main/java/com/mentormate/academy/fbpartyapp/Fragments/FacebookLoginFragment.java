@@ -20,8 +20,11 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
+import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
+import com.mentormate.academy.fbpartyapp.MainActivity;
 import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
+import com.mentormate.academy.fbpartyapp.Services.EventsDownloadService;
 import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
@@ -129,35 +132,20 @@ public class FacebookLoginFragment extends Fragment {
 
                         userInfoTextView.setText(buildUserInfoDisplay(user));
 
-//                        Intent intent = new Intent("test");
-//                        intent.putExtra("lbTest", "Resulttest");
-//                        currentContext.sendBroadcast(intent);
-
-                       Bundle bundle = new Bundle();
-
-
-                        Intent intent = new Intent(currentContext, Parties.class);
-                       // intent.putExtra("session", session);
+                        Intent intent = new Intent(getActivity(), Parties.class);
                         startActivity(intent);
-                       // startDownloadService();
-
-                       // getRequestData("341486209377198");
-                      //  getRequestData("341486209377198/feed");
                     }
                 }
             });
 
-
-
-
-
         } else if (state.isClosed()) {
             Log.i(Constants.LOG_DEBUG, "Logged out...");
-            userInfoTextView.setVisibility(View.INVISIBLE);
-            lbServiceResult.setVisibility(View.INVISIBLE);
+
+            /*Intent intent = new Intent(currentContext, MainActivity.class);
+            startActivity(intent);*/
+
         }
     }
-
 
 
     private String buildUserInfoDisplay(GraphUser user) {

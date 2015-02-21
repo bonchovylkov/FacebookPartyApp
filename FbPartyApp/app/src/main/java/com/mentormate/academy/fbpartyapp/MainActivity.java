@@ -1,53 +1,14 @@
 package com.mentormate.academy.fbpartyapp;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
-import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.FacebookLoginFragment;
-
-import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
-import com.mentormate.academy.fbpartyapp.Utils.Constants;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 
 public class MainActivity extends FragmentActivity {
 
-    private LoginButton loginBtn;
     private FacebookLoginFragment facebookLoginFragment;
-    private TextView lbServiceResult;
-
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra("lbTest")) {
-                startDownloadService();
-
-            }
-        }
-    };
-
-
-    private void startDownloadService() {
-        Intent intent = new Intent(this, PartiesDownloadService.class);
-        intent.setAction(PartiesDownloadService.ACTION_ASYNC);
-        intent.putExtra(PartiesDownloadService.GRAPH_API_ID_LABEL, Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);
-        startService(intent);
-    }
 
 
     @Override
@@ -74,12 +35,6 @@ public class MainActivity extends FragmentActivity {
 
         }*/
 
-        registerReceiver(receiver,
-                new IntentFilter("test"));
-
-        registerReceiver(receiver,
-                new IntentFilter(PartiesDownloadService.BROADCAST_RESULT));
-
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
             facebookLoginFragment = new FacebookLoginFragment(getBaseContext());
@@ -88,17 +43,6 @@ public class MainActivity extends FragmentActivity {
                     .add(android.R.id.content, facebookLoginFragment)
                     .commit();
 
-//            loginBtn = (LoginButton) findViewById(R.id.authButton);
-//            loginBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-//                @Override
-//                public void onUserInfoFetched(GraphUser user) {
-//                    if (user != null) {
-//                        Log.d(Constants .LOG_DEBUG,"Hello, " + user.getName());
-//                    } else {
-//                        Log.d(Constants .LOG_DEBUG,"You are not logged");
-//                    }
-//                }
-//            });
         } else {
             // Or set the fragment from restored state info
             facebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()
@@ -132,9 +76,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        if(receiver!=null){
-//            unregisterReceiver(receiver);
-//        }
-
     }
+
 }
