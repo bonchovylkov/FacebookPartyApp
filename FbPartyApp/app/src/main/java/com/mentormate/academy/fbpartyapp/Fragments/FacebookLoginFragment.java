@@ -20,7 +20,6 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
-import com.mentormate.academy.fbpartyapp.MainActivity;
 import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
@@ -111,8 +110,6 @@ public class FacebookLoginFragment extends Fragment {
 
 
 
-    //may create the a Single instance for the facebook btn and use it everywhere
-
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
 
        SingletonSession.getInstance().setCurrentSession(session);
@@ -144,7 +141,8 @@ public class FacebookLoginFragment extends Fragment {
                         startActivity(intent);
                        // startDownloadService();
 
-
+                       // getRequestData("341486209377198");
+                      //  getRequestData("341486209377198/feed");
                     }
                 }
             });
@@ -155,8 +153,6 @@ public class FacebookLoginFragment extends Fragment {
 
         } else if (state.isClosed()) {
             Log.i(Constants.LOG_DEBUG, "Logged out...");
-            Intent intent = new Intent(currentContext, MainActivity.class);
-            startActivity(intent);
             userInfoTextView.setVisibility(View.INVISIBLE);
             lbServiceResult.setVisibility(View.INVISIBLE);
         }

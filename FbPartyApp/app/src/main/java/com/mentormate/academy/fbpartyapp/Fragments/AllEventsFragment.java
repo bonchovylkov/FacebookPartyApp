@@ -1,11 +1,13 @@
 package com.mentormate.academy.fbpartyapp.Fragments;
 
 import android.app.ListFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.mentormate.academy.fbpartyapp.CustomAdapters.AllEventsAdapter;
@@ -21,6 +23,7 @@ import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 //it's connected to xml by class="com.homeassignment.cinemaapp.CinemaFragment"  from the xml file
 public class AllEventsFragment extends ListFragment  {
+    private ListAdapter listAdapter;
 
     public int getmCurCheckPosition() {
         return mCurCheckPosition;
@@ -39,9 +42,9 @@ public class AllEventsFragment extends ListFragment  {
         Log.d(Constants.LOG_DEBUG, "AllEventsFragment:onActivityCreated");
 
 
-
+        listAdapter = new AllEventsAdapter(getActivity());
         // Populate list with all the cinemas that the adapted has
-        setListAdapter(new AllEventsAdapter(getActivity()));
+        setListAdapter(listAdapter);
 
 
 
@@ -52,13 +55,6 @@ public class AllEventsFragment extends ListFragment  {
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        //this doesn't work for custom adapters
-        // Highlight the selected item in the list view .
-
-       // getListView().setItemChecked(mCurCheckPosition, true);
-
-
-       // setSelectedItemColor(l, v,null);
     }
 
 
@@ -120,7 +116,9 @@ public class AllEventsFragment extends ListFragment  {
     }
 
 
-
-
+    public void refresh(Context context) {
+        listAdapter = new AllEventsAdapter(context);
+        this.setListAdapter(listAdapter);
+    }
 
 }

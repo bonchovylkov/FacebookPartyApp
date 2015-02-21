@@ -22,12 +22,12 @@ import java.util.ArrayList;
  */
 public class AllEventsAdapter extends BaseAdapter {
 
-   private ArrayList<Event> list = new ArrayList<Event>();
+    private ArrayList<Event> list = new ArrayList<Event>();
     private Context context;
     public AllEventsAdapter(Context context) {
 
         this.context = context;
-       Cursor c =  context.getContentResolver().query(Constants.URI, null, null, null, "");
+        Cursor c =  context.getContentResolver().query(Constants.URI, null, null, null, "");
         String result = "Results:";
         if (!c.moveToFirst()) {
 
