@@ -1,7 +1,6 @@
 package com.mentormate.academy.fbpartyapp.Models;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Student11 on 2/16/2015.
@@ -12,6 +11,7 @@ public class Event implements Serializable {
     private String name;
     private String startTime;
     private String Description;
+    private String coverSource;
 
     public String getDescription() {
         return Description;
@@ -49,7 +49,15 @@ public class Event implements Serializable {
         return startTime;
     }
 
+    public String getCoverSource() {
+        return coverSource;
+    }
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public void setCover(String cover) {
+        this.coverSource = cover;
     }
 }

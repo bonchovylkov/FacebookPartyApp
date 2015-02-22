@@ -252,9 +252,9 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
                         try {
                             JSONObject cover = graphResult.getJSONObject("cover");
 
-                            if( cover.has("id") )
+                            if( cover.has("source") )
                             {
-                                values.put(Constants.DB_COVER, cover.getString("id"));
+                                values.put(Constants.DB_COVER, cover.getString("source"));
                             }
 
                         } catch (JSONException e) {

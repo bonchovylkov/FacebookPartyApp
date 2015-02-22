@@ -25,6 +25,8 @@ public class Parties extends FragmentActivity {
 
     private Session session;
 
+    private ActionBar actionBar;
+
     ActionBar.Tab tabTodayEvents;
     ActionBar.Tab tabAllEvents;
 
@@ -36,6 +38,8 @@ public class Parties extends FragmentActivity {
 
                 todayEventsFragment.refresh(getApplicationContext());
                 allEventsFragment.refresh(getApplicationContext());
+
+                actionBar.setSelectedNavigationItem(1);
             }
         }
     };
@@ -92,7 +96,7 @@ public class Parties extends FragmentActivity {
 
     private void setTabs() {
 
-        ActionBar actionBar = getActionBar();
+        actionBar = getActionBar();
         Log.d(Constants.LOG_DEBUG,"actionBar " + actionBar);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
