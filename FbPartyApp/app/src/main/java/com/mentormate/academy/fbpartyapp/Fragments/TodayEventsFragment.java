@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.mentormate.academy.fbpartyapp.CustomAdapters.AllEventsAdapter;
 import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
 import com.mentormate.academy.fbpartyapp.EventDetails;
 import com.mentormate.academy.fbpartyapp.Models.Event;
@@ -46,8 +45,7 @@ public class TodayEventsFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        // Populate list with all the cinemas that the adapted has
-        setListAdapter(new TodayEventsAdapter(getActivity()));
+
         Log.d(Constants.LOG_DEBUG, "TitlesFragment:onActivityCreated");
 
         if (savedInstanceState != null) {
@@ -56,7 +54,7 @@ public class TodayEventsFragment extends ListFragment {
             selectedCinemaIndex = savedInstanceState.getInt("currentCinemaSelected",0);
         }
 
-      //  setListAdapter(new MovieAdapter(this.getActivity(),selectedCinemaIndex));
+        //  setListAdapter(new MovieAdapter(this.getActivity(),selectedCinemaIndex));
 
         listAdapter = new TodayEventsAdapter(getActivity());
         // Populate list with all the cinemas that the adapted has
@@ -91,15 +89,15 @@ public class TodayEventsFragment extends ListFragment {
         setSelectedItemColor(l, v,null);
 
 
+        TodayEventsAdapter adapter = new TodayEventsAdapter(this.getActivity());
+        Event event= adapter.getItem(position);
 
-
-
-         Intent intent = new Intent();
+        Intent intent = new Intent();
         intent.setClass(getActivity(), EventDetails.class);
         intent.putExtra(Constants.INTENT_EVENT_EXTRA_PARAM,event);
 
 
-          startActivity(intent);
+        startActivity(intent);
 
     }
 
