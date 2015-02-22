@@ -1,14 +1,10 @@
 package com.mentormate.academy.fbpartyapp;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -17,9 +13,6 @@ import android.widget.TextView;
 
 import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.FacebookLoginFragment;
-
-import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
-import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,24 +24,6 @@ public class MainActivity extends FragmentActivity {
     private FacebookLoginFragment facebookLoginFragment;
     private TextView lbServiceResult;
 
-//    BroadcastReceiver receiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if (intent.hasExtra("lbTest")) {
-//                startDownloadService();
-//
-//            }
-//        }
-//    };
-
-
-    private void startDownloadService() {
-        Intent intent = new Intent(this, PartiesDownloadService.class);
-        intent.setAction(PartiesDownloadService.ACTION_ASYNC);
-        intent.putExtra(PartiesDownloadService.GRAPH_API_ID_LABEL, Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED);
-        startService(intent);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +33,7 @@ public class MainActivity extends FragmentActivity {
         //IF you get an error: "Invalid keyhash"
         // Uncomment below lines and look for "KeyHash:" in Logcat.
         // Copy that keyhash in the FB app settings;
-        /*
+
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.mentormate.academy.fbpartyapp",
@@ -72,7 +47,7 @@ public class MainActivity extends FragmentActivity {
 
         } catch (NoSuchAlgorithmException e) {
 
-        }*/
+        }
 
 
 //        registerReceiver(receiver,

@@ -42,7 +42,7 @@ android:focusable="false"
         android:layout_height="70dp"
         android:id="@+id/eventPicture"
         android:focusable="false"
-        android:background="@drawable/ic_launcher"
+        android:src="@drawable/logo"
         android:layout_alignParentRight="true" />
 
 </RelativeLayout>

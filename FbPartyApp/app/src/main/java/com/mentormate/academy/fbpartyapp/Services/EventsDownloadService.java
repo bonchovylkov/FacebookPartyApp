@@ -1,16 +1,12 @@
 package com.mentormate.academy.fbpartyapp.Services;
 
 import android.app.Service;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.util.Patterns;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
@@ -22,16 +18,7 @@ import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.Utils.PopulateEventsData;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Student11 on 2/19/2015.

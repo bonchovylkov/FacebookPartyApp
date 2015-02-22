@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import com.mentormate.academy.fbpartyapp.Models.Event;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,6 +61,7 @@ public class BaseHelper {
         String eventId = c.getString(c.getColumnIndex(Constants.DB_EVENT_ID));
         String description =  c.getString(c.getColumnIndex(Constants.DB_DESCRIPTION));
         String startTime = c.getString(c.getColumnIndex(Constants.DB_START_TIME));
+        String cover = c.getString(c.getColumnIndex(Constants.DB_COVER));
 
 
         Event event = new Event();
@@ -70,6 +70,7 @@ public class BaseHelper {
         event.setStartTime(startTime);
         event.setEventId(eventId);
         event.setDescription(description);
+        event.setCover(cover);
         return event;
     }
 

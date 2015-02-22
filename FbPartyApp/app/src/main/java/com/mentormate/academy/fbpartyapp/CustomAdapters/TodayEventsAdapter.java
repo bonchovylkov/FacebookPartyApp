@@ -15,6 +15,7 @@ import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Utils.BaseHelper;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -89,9 +90,11 @@ public class TodayEventsAdapter extends BaseAdapter {
 
         }
 
-        eventName.setText("" + BaseHelper.getSubstringByCount(getItem(position).getName(), 100));
-        startDate.setText("" +BaseHelper.getDateInFormat("", getItem(position).getStartTime()));
-        //eventPicture.setBackgroundResource(getItem(position).getPicture());
+        Event e = getItem(position);
+
+        eventName.setText("" + BaseHelper.getSubstringByCount(e.getName(), 100));
+        startDate.setText("" +BaseHelper.getDateInFormat("", e.getStartTime()));
+        Picasso.with(context).load(e.getCoverSource()).into(eventPicture);
 
         return convertView;
     }
