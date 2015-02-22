@@ -1,6 +1,9 @@
 package com.mentormate.academy.fbpartyapp.Models;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 import java.io.Serializable;
 
