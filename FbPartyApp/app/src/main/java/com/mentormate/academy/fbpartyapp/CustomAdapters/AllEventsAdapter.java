@@ -22,27 +22,19 @@ import java.util.ArrayList;
  */
 public class AllEventsAdapter extends BaseAdapter {
 
-   private ArrayList<Event> list = new ArrayList<Event>();
+    private ArrayList<Event> list = new ArrayList<Event>();
     private Context context;
     public AllEventsAdapter(Context context) {
 
         this.context = context;
-       Cursor c =  context.getContentResolver().query(Constants.URI, null, null, null, "");
+        Cursor c =  context.getContentResolver().query(Constants.URI, null, null, null, "");
         String result = "Results:";
         if (!c.moveToFirst()) {
 
              Toast.makeText(context, result + " no content yet!", Toast.LENGTH_LONG).show();
         } else {
             do{
-                String name = c.getString(c.getColumnIndex(Constants.DB_NAME));
-                String id = c.getString(c.getColumnIndex(Constants.DB_ID));
-                String startTime = c.getString(c.getColumnIndex(Constants.DB_START_TIME));
-
-                Event event = new Event();
-                event.setId((Integer.parseInt(id)));
-                event.setName(name);
-                event.setStartTime(startTime);
-
+                Event event = BaseHelper.setEventData(c);
                 list.add(event);
 
 

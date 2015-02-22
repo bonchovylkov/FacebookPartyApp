@@ -1,15 +1,18 @@
 package com.mentormate.academy.fbpartyapp.Fragments;
 
 import android.app.ListFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.mentormate.academy.fbpartyapp.CustomAdapters.AllEventsAdapter;
 import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
+import com.mentormate.academy.fbpartyapp.EventDetails;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
@@ -19,6 +22,8 @@ import com.mentormate.academy.fbpartyapp.Utils.Constants;
  * Created by Bon on 12/29/2014.
  */
 public class TodayEventsFragment extends ListFragment {
+
+    private ListAdapter listAdapter;
 
     public int getSelectedCinemaIndex() {
         return selectedCinemaIndex;
@@ -53,6 +58,10 @@ public class TodayEventsFragment extends ListFragment {
 
       //  setListAdapter(new MovieAdapter(this.getActivity(),selectedCinemaIndex));
 
+        listAdapter = new TodayEventsAdapter(getActivity());
+        // Populate list with all the cinemas that the adapted has
+        setListAdapter(listAdapter);
+
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         //this doesn't work for custom adapters
@@ -86,13 +95,9 @@ public class TodayEventsFragment extends ListFragment {
 
 
          Intent intent = new Intent();
-//        intent.setClass(getActivity(), MovieDetails.class);
-//        intent.putExtra("SelectedMovieCode", position);
-//        intent.putExtra("MovieName", movie.getName());
-//        intent.putExtra("Cast", movie.getCast());
-//        intent.putExtra("CinemasPlayedIn",movie.getPlayedInCinemas());
-//        intent.putExtra("MoviePicture",movie.getPicture());
-//        intent.putExtra("HasSeats",movie.getHasTickets());
+        intent.setClass(getActivity(), EventDetails.class);
+        intent.putExtra(Constants.INTENT_EVENT_EXTRA_PARAM,event);
+
 
           startActivity(intent);
 
@@ -114,6 +119,8 @@ public class TodayEventsFragment extends ListFragment {
     }
 
 
-
-
+    public void refresh(Context context) {
+        listAdapter = new TodayEventsAdapter(context);
+        this.setListAdapter(listAdapter);
+    }
 }

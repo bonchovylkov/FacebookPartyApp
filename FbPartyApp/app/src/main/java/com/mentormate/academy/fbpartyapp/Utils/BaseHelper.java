@@ -1,5 +1,9 @@
 package com.mentormate.academy.fbpartyapp.Utils;
 
+import android.database.Cursor;
+
+import com.mentormate.academy.fbpartyapp.Models.Event;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +54,23 @@ public class BaseHelper {
         /*DateFormat formatter5=Constants.formatter;
         String formattedDate = formatter5.format(dateStr);
         return  formattedDate;*/
+    }
+
+    public static Event setEventData(Cursor c) {
+        String name = c.getString(c.getColumnIndex(Constants.DB_NAME));
+        String id = c.getString(c.getColumnIndex(Constants.DB_ID));
+        String eventId = c.getString(c.getColumnIndex(Constants.DB_EVENT_ID));
+        String description =  c.getString(c.getColumnIndex(Constants.DB_DESCRIPTION));
+        String startTime = c.getString(c.getColumnIndex(Constants.DB_START_TIME));
+
+
+        Event event = new Event();
+        event.setId((Integer.parseInt(id)));
+        event.setName(name);
+        event.setStartTime(startTime);
+        event.setEventId(eventId);
+        event.setDescription(description);
+        return event;
     }
 
 

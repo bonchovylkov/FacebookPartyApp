@@ -97,7 +97,7 @@ public class EventsProvider extends ContentProvider {
         }
 
         Cursor cursor = queryBuilder.query(db, projection, selection , selectionArgs, null, null, sortOrder);
-        Log.d(Constants.LOG_DEBUG, "queryBuilder query: " + queryBuilder.buildQuery(projection, selection, "", null, sortOrder, null));
+        //Log.d(Constants.LOG_DEBUG, "queryBuilder query: " + queryBuilder.buildQuery(projection, selection, "", null, sortOrder, null));
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;

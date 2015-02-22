@@ -1,27 +1,29 @@
 package com.mentormate.academy.fbpartyapp;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.FrameLayout;
 
+import com.facebook.Session;
 import com.mentormate.academy.fbpartyapp.Fragments.AllEventsFragment;
 import com.mentormate.academy.fbpartyapp.Fragments.TodayEventsFragment;
 import com.mentormate.academy.fbpartyapp.Services.EventsDownloadService;
-import com.mentormate.academy.fbpartyapp.Services.PartiesDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
+import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
 
-public class Parties extends Activity {
+public class Parties extends FragmentActivity {
+
+    private Session session;
 
     ActionBar.Tab tabTodayEvents;
     ActionBar.Tab tabAllEvents;
@@ -30,11 +32,10 @@ public class Parties extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra(EventsDownloadService.KEY_MESSAGE)) {
-                Log.d(Constants.LOG_DEBUG, "" + intent.getIntExtra(EventsDownloadService.KEY_MESSAGE, 0));
+                Log.d(Constants.LOG_DEBUG, "broadcast result: " + intent.getIntExtra(EventsDownloadService.KEY_MESSAGE, 0));
 
-                FrameLayout allEvents = (FrameLayout) findViewById(R.id.tabsLayout);
-                allEvents.invalidate();
-
+                todayEventsFragment.refresh(getApplicationContext());
+                allEventsFragment.refresh(getApplicationContext());
             }
         }
     };
@@ -44,13 +45,25 @@ public class Parties extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        //check session
+        session = SingletonSession.getInstance().getCurrentSession();
+        if(session == null || !session.isOpened())
+        {
+            //we should be here only with an active session
+            //Go back to main activity
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            startActivity(mainIntent);
+        }
+
+        //delete DB
         //int count = getContentResolver().delete(Constants.URI, null, null);
-//        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+        //Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
 
         //download events info
         Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
         eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
         startService(eventsDownloadIntent);
+
 
         //register receiver
         registerReceiver(receiver,
@@ -60,6 +73,20 @@ public class Parties extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_events_main);
         setTabs();
+
+        /*if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            facebookLoginFragment = new FacebookLoginFragment(getBaseContext());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, facebookLoginFragment)
+                    .commit();
+
+        } else {
+            // Or set the fragment from restored state info
+            facebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()
+                    .findFragmentById(android.R.id.content);
+        }*/
 
     }
 

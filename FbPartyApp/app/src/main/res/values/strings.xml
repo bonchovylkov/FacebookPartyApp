@@ -7,5 +7,6 @@
     <string name="app_id">333774683480727</string>
     <string name="title_facebook_login">Please login my party animal</string>
     <string name="title_activity_parties">Parties</string>
+    <string name="title_activity_event_details">EventDetails</string>
 
 </resources>
