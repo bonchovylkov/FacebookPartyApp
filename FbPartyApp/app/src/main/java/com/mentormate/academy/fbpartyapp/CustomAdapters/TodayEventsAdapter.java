@@ -35,14 +35,7 @@ public class TodayEventsAdapter extends BaseAdapter {
             Toast.makeText(context, result + " no content yet!", Toast.LENGTH_LONG).show();
         } else {
             do{
-                String name = c.getString(c.getColumnIndex(Constants.DB_NAME));
-                String id = c.getString(c.getColumnIndex(Constants.DB_ID));
-                String startTime = c.getString(c.getColumnIndex(Constants.DB_START_TIME));
-
-                Event event = new Event();
-                event.setId((Integer.parseInt(id)));
-                event.setName(name);
-                event.setStartTime(startTime);
+                Event event = BaseHelper.setEventData(c);
 
                 list.add(event);
 
@@ -51,6 +44,8 @@ public class TodayEventsAdapter extends BaseAdapter {
             //Toast.makeText(this, result, Toast.LENGTH_LONG).show();
         }
     }
+
+
 
     @Override
     public int getCount() {

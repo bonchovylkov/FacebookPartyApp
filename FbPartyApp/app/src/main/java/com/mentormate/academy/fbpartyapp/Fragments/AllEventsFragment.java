@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.mentormate.academy.fbpartyapp.CustomAdapters.AllEventsAdapter;
 import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
+import com.mentormate.academy.fbpartyapp.EventDetails;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
@@ -86,14 +87,8 @@ public class AllEventsFragment extends ListFragment  {
         Event event= adapter.getItem(position);
 
         Intent intent = new Intent();
-//        intent.setClass(getActivity(), MovieDetails.class);
-//        intent.putExtra("SelectedMovieCode", position);
-//        intent.putExtra("MovieName", movie.getName());
-//        intent.putExtra("Cast", movie.getCast());
-//        intent.putExtra("CinemasPlayedIn",movie.getPlayedInCinemas());
-//        intent.putExtra("MoviePicture",movie.getPicture());
-//        intent.putExtra("HasSeats",movie.getHasTickets());
-
+        intent.setClass(getActivity(), EventDetails.class);
+        intent.putExtra(Constants.INTENT_EVENT_EXTRA_PARAM,event);
         startActivity(intent);
     }
 

@@ -1,15 +1,25 @@
 package com.mentormate.academy.fbpartyapp.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Student11 on 2/16/2015.
  */
-public class Event {
+public class Event implements Serializable {
     private int id;
-    private int eventId;
+    private String eventId;
     private String name;
     private String startTime;
+    private String Description;
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
 
     public int getId() {
         return id;
@@ -19,11 +29,11 @@ public class Event {
         this.id = id;
     }
 
-    public int getEventId() {
+    public String getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 
