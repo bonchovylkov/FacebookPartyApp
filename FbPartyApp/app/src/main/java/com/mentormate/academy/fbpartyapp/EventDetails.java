@@ -3,12 +3,22 @@ package com.mentormate.academy.fbpartyapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LikeView;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
+import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
 
 public class EventDetails extends Activity {
@@ -16,13 +26,16 @@ public class EventDetails extends Activity {
     TextView lbEventName;
     TextView lbEventStartTime;
     TextView lbEventDescription;
+    private UiLifecycleHelper uiHelper;
+    Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
         Intent intent = getIntent();
-        Event event = (Event)intent.getSerializableExtra(Constants.INTENT_EVENT_EXTRA_PARAM);
+        event = (Event)intent.getSerializableExtra(Constants.INTENT_EVENT_EXTRA_PARAM);
+        uiHelper = new UiLifecycleHelper(this, callback);
 
         lbEventDescription =(TextView) findViewById(R.id.lbEventDescription);
         lbEventStartTime =(TextView) findViewById(R.id.lbEventStartTime);
@@ -55,4 +68,24 @@ public class EventDetails extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        uiHelper.onActivityResult(requestCode, resultCode, data, null);
+        // if you don't use the UiLifecycleHelper, call handleOnActivityResult on the LikeView instead
+        // LikeView.handleOnActivityResult(this, requestCode, resultCode, data);
+
+    }
+
+
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            LikeView likeView = (LikeView) findViewById(R.id.like_view);
+            likeView.setObjectId(Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID);
+
+        }
+    };
 }

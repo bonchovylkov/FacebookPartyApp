@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
  */
 public class Constants {
     public static final String LOG_DEBUG= "LOG_DEBUG";
+    public static final String FB_PAGE_WHERE_IS_THE_PARTY_ID =  "341486209377198";
     public static final String FB_PAGE_WHERE_IS_THE_PARTY_ID_FEED = "341486209377198/feed";
 
     public static final String FB_EVENT_FIELDS_PARAM = "fields";

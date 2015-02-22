@@ -7,14 +7,7 @@
     android:id="@+id/main_activity">
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo"
-        android:alpha=".75"
-        android:layout_below="@+id/userInfoTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp" />
+
 
     <TextView
         android:id="@+id/userInfoTextView"
