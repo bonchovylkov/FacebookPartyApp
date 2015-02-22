@@ -60,8 +60,8 @@ public class Parties extends FragmentActivity {
         }
 
         //delete DB
-        //int count = getContentResolver().delete(Constants.URI, null, null);
-        //Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+//        int count = getContentResolver().delete(Constants.URI, null, null);
+//        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
 
         //download events info
         Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
@@ -157,7 +157,13 @@ public class Parties extends FragmentActivity {
         actionBar.addTab(tabAllEvents);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(receiver!=null) {
+            unregisterReceiver(receiver);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -61,9 +61,11 @@ public class FacebookLoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         userInfoTextView = (TextView) view.findViewById(R.id.userInfoTextView);
         lbServiceResult=(TextView) view.findViewById(R.id.lbServiceResult);
+
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setReadPermissions(Arrays.asList("user_likes"));
         authButton.setFragment(this);
+        authButton.setReadPermissions(Arrays.asList("user_likes"));
 
         return view;
     }
