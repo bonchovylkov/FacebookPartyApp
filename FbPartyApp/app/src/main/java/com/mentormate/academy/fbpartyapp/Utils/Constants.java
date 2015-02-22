@@ -41,6 +41,6 @@ public class Constants {
 
 
 
-    public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }

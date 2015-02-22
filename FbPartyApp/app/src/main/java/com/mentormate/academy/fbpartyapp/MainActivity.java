@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity {
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
-            facebookLoginFragment = new FacebookLoginFragment(getBaseContext());
+            facebookLoginFragment = new FacebookLoginFragment();
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(android.R.id.content, facebookLoginFragment)

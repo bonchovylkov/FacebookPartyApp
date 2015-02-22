@@ -3,22 +3,16 @@ package com.mentormate.academy.fbpartyapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
 import com.facebook.widget.LikeView;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
-import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
 
 public class EventDetails extends Activity {

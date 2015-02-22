@@ -1,5 +1,7 @@
 package com.mentormate.academy.fbpartyapp.Models;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +14,8 @@ public class Event implements Serializable {
     private String startTime;
     private String Description;
     private String coverSource;
+    private String lat, lng;
+    private LatLng location;
 
     public String getDescription() {
         return Description;
@@ -59,5 +63,20 @@ public class Event implements Serializable {
 
     public void setCover(String cover) {
         this.coverSource = cover;
+    }
+
+    public void setLocation(String eventLat, String eventLng) {
+        this.lat = eventLat;
+        this.lng = eventLng;
+    }
+
+    public String getLat()
+    {
+        return lat;
+    }
+
+    public String getLng()
+    {
+        return lng;
     }
 }

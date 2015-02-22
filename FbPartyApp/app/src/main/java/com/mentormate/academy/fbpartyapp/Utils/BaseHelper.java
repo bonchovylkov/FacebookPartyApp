@@ -63,6 +63,8 @@ public class BaseHelper {
         String startTime = c.getString(c.getColumnIndex(Constants.DB_START_TIME));
         String cover = c.getString(c.getColumnIndex(Constants.DB_COVER));
 
+        String eventLat = c.getString(c.getColumnIndex(Constants.DB_LAT));
+        String eventLon = c.getString(c.getColumnIndex(Constants.DB_LON));
 
         Event event = new Event();
         event.setId((Integer.parseInt(id)));
@@ -71,6 +73,7 @@ public class BaseHelper {
         event.setEventId(eventId);
         event.setDescription(description);
         event.setCover(cover);
+        event.setLocation(eventLat, eventLon);
         return event;
     }
 

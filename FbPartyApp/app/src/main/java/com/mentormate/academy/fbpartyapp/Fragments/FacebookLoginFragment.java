@@ -5,6 +5,7 @@ package com.mentormate.academy.fbpartyapp.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,17 +20,16 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-
 import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
-import com.mentormate.academy.fbpartyapp.json_parsers.TestParsers;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Student11 on 2/9/2015.
@@ -44,10 +44,17 @@ public class FacebookLoginFragment extends Fragment {
     public FacebookLoginFragment() {
     }
 
-    public FacebookLoginFragment(Context currentContext) {
+    /*public FacebookLoginFragment(Context currentContext) {
         this.currentContext = currentContext;
-    }
+    }*/
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        currentContext = getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +62,7 @@ public class FacebookLoginFragment extends Fragment {
         userInfoTextView = (TextView) view.findViewById(R.id.userInfoTextView);
         lbServiceResult=(TextView) view.findViewById(R.id.lbServiceResult);
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton.setReadPermissions(Arrays.asList("user_likes"));
         authButton.setFragment(this);
 
         return view;
