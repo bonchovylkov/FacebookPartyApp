@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.R;
+import com.mentormate.academy.fbpartyapp.Utils.BaseHelper;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
 import java.util.ArrayList;
@@ -70,24 +71,31 @@ public class TodayEventsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView eventPicture;
         TextView eventName;
+        TextView startDate;
+        TextView endDate;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.event_row, parent, false);
             eventName = (TextView) convertView.findViewById(R.id.eventName);
             eventPicture = (ImageView) convertView.findViewById(R.id.eventPicture);
+            startDate =  (TextView) convertView.findViewById(R.id.lbStartDate);
 
             //it works faster with set tag
             convertView.setTag(R.id.eventName, eventName);
             convertView.setTag(R.id.eventPicture, eventPicture);
+            convertView.setTag(R.id.lbStartDate, startDate);
+
 
 
         } else {
             eventName = (TextView) convertView.getTag(R.id.eventName);
             eventPicture = (ImageView) convertView.getTag(R.id.eventPicture);
+            startDate = (TextView) convertView.getTag(R.id.lbStartDate);
 
         }
 
-        eventName.setText("" + getItem(position).getName());
+        eventName.setText("" + BaseHelper.getSubstringByCount(getItem(position).getName(), 100));
+        startDate.setText("" +BaseHelper.getDateInFormat("", getItem(position).getStartTime()));
         //eventPicture.setBackgroundResource(getItem(position).getPicture());
 
         return convertView;

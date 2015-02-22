@@ -44,8 +44,8 @@ public class Parties extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        int count = getContentResolver().delete(Constants.URI, null, null);
-        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+        //int count = getContentResolver().delete(Constants.URI, null, null);
+//        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
 
         //download events info
         Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
