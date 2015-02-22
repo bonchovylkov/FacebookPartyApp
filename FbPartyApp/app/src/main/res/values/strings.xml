@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">FbPartyApp</string>
-    <string name="google_maps_api_key">    AIzaSyBOTF8iaJMbjzSHMMTOcBb9X5G_65iOvFM</string>
+    <string name="google_maps_api_key">AIzaSyBOTF8iaJMbjzSHMMTOcBb9X5G_65iOvFM</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
