@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Student11 on 2/9/2015.
@@ -54,8 +55,10 @@ public class FacebookLoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         userInfoTextView = (TextView) view.findViewById(R.id.userInfoTextView);
         lbServiceResult=(TextView) view.findViewById(R.id.lbServiceResult);
+
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
+        authButton.setReadPermissions(Arrays.asList("user_likes"));
 
         return view;
     }

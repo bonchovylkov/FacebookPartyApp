@@ -7,25 +7,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LikeView;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
+import com.squareup.picasso.Picasso;
 
 
-public class EventDetails extends Activity {
+public class EventDetails extends Activity  {
 
     TextView lbEventName;
     TextView lbEventStartTime;
     TextView lbEventDescription;
+    ImageView eventImage;
     private UiLifecycleHelper uiHelper;
     Event event;
 
@@ -35,15 +39,21 @@ public class EventDetails extends Activity {
         setContentView(R.layout.activity_event_details);
         Intent intent = getIntent();
         event = (Event)intent.getSerializableExtra(Constants.INTENT_EVENT_EXTRA_PARAM);
-        uiHelper = new UiLifecycleHelper(this, callback);
+
+        Settings.sdkInitialize(this);
+
+        LikeView likeView = (LikeView) findViewById(R.id.like_view);
+        likeView.setObjectId("http://www.facebook.com/"+Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID);
 
         lbEventDescription =(TextView) findViewById(R.id.lbEventDescription);
         lbEventStartTime =(TextView) findViewById(R.id.lbEventStartTime);
         lbEventName =(TextView) findViewById(R.id.lbEventName);
+        eventImage =  (ImageView)findViewById(R.id.eventImage);
 
         lbEventDescription.setText(event.getDescription());
         lbEventStartTime.setText(event.getStartTime());
         lbEventName.setText(event.getName());
+        Picasso.with(this).load(event.getCoverSource()).into(eventImage);
     }
 
 
@@ -73,19 +83,28 @@ public class EventDetails extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        uiHelper.onActivityResult(requestCode, resultCode, data, null);
+Log.d(Constants.LOG_DEBUG,"onActivityResult:" + requestCode + " " + resultCode);
+       // uiHelper.onActivityResult(requestCode, resultCode, data, null);
         // if you don't use the UiLifecycleHelper, call handleOnActivityResult on the LikeView instead
-        // LikeView.handleOnActivityResult(this, requestCode, resultCode, data);
+         LikeView.handleOnActivityResult(this, requestCode, resultCode, data);
 
     }
 
 
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            LikeView likeView = (LikeView) findViewById(R.id.like_view);
-            likeView.setObjectId(Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID);
+//    private Session.StatusCallback callback = new Session.StatusCallback() {
+//        @Override
+//        public void call(Session session, SessionState state, Exception exception) {
+//
+//            Log.d(Constants.LOG_DEBUG,"callback:" + session.toString());
+//
+//
+//
+//
+//        }
+//    };
 
-        }
-    };
+//    @Override
+//    public void onClick(View v) {
+//        startActivityForResult(new Intent(this,VisusActivity.class), 0);
+//    }
 }
