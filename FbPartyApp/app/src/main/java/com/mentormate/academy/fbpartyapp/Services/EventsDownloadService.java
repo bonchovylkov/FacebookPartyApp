@@ -75,8 +75,6 @@ public class EventsDownloadService extends Service {
 
 
     private void getRequestData(final String inRequestId) {
-        //set active session to our session!
-        //Log.d(Constants.LOG_DEBUG, "currentSession: " + session);
 
         //params -> ?since=<unix timestamp of last update>
         Bundle params = new Bundle();

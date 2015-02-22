@@ -11,7 +11,7 @@
     </FrameLayout>
 
     <com.facebook.widget.LoginButton
-        android:id="@+id/authButton"
+        android:id="@+id/fbAuthButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

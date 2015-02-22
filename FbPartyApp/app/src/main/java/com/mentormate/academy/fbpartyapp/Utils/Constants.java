@@ -25,7 +25,7 @@ public class Constants {
     public static final String URL          = "content://" + AUTHORITY + "/" + DB_DBNAME;
     public static final Uri URI             = Uri.parse(URL);
 
-    public final static int DB_VERSION      = 4;
+    public final static int DB_VERSION      = 5;
     public static final String TABLE_NAME = "Events";
 
     public static final String DB_ID        = "_id";
@@ -38,7 +38,7 @@ public class Constants {
     public static final String DB_COVER     = "cover";
     public static final String DB_DESCRIPTION      = "description";
 
-
+    public static final String INITIAL_STARTUP = "initial_startup";
 
 
     public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

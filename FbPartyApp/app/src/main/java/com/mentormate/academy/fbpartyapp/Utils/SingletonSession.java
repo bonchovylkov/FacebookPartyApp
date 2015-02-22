@@ -10,11 +10,11 @@ public class SingletonSession {
     private Session currentSession;
 
     public Session getCurrentSession() {
-        return currentSession;
+        return Session.getActiveSession();
     }
 
-    public void setCurrentSession(Session currentSession) {
-        this.currentSession = currentSession;
+    public void setCurrentSession() {
+        this.currentSession = Session.getActiveSession();
     }
 
     private  SingletonSession(){

@@ -1,7 +1,6 @@
 package com.mentormate.academy.fbpartyapp.Fragments;
 
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,22 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Parties;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -47,7 +39,6 @@ public class FacebookLoginFragment extends Fragment {
     /*public FacebookLoginFragment(Context currentContext) {
         this.currentContext = currentContext;
     }*/
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -75,11 +66,16 @@ public class FacebookLoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
+
+        Log.d(Constants.LOG_DEBUG, "onCreate()");
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        Log.d(Constants.LOG_DEBUG, "onResume()");
 
         // For scenarios where the main activity is launched and user
         // session is not null, the session state change notification
@@ -103,10 +99,14 @@ public class FacebookLoginFragment extends Fragment {
     public void onPause() {
         super.onPause();
         uiHelper.onPause();
+
+        Log.d(Constants.LOG_DEBUG, "onPause()");
     }
 
     @Override
     public void onDestroy() {
+        Log.d(Constants.LOG_DEBUG, "onDestroy()");
+
         super.onDestroy();
         uiHelper.onDestroy();
     }
@@ -115,103 +115,31 @@ public class FacebookLoginFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
+        Log.d(Constants.LOG_DEBUG, "onSaveInstanceState()");
     }
 
-
-
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
+        Log.d(Constants.LOG_DEBUG, "onSessionStateChange()");
 
-       SingletonSession.getInstance().setCurrentSession(session);
+       SingletonSession.getInstance().setCurrentSession();
 
         if (state.isOpened()) {
             Log.i(Constants.LOG_DEBUG, "Logged in...");
 
-            // Request user data and show the results
-            Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        // Display the parsed user info
-                        userInfoTextView.setVisibility(View.VISIBLE);
-                        lbServiceResult.setVisibility(View.VISIBLE);
-
-                        userInfoTextView.setText(buildUserInfoDisplay(user));
-
-//                        Intent intent = new Intent("test");
-//                        intent.putExtra("lbTest", "Resulttest");
-//                        currentContext.sendBroadcast(intent);
-
-                       Bundle bundle = new Bundle();
-
-
-                        Intent intent = new Intent(currentContext, Parties.class);
-                       // intent.putExtra("session", session);
-                        startActivity(intent);
-                       // startDownloadService();
-
-                       // getRequestData("341486209377198");
-                      //  getRequestData("341486209377198/feed");
-                    }
-                }
-            });
-
-
-
+            Intent intent = new Intent(currentContext, Parties.class);
+            intent.putExtra(Constants.INITIAL_STARTUP, 1);
+            startActivity(intent);
 
 
         } else if (state.isClosed()) {
             Log.i(Constants.LOG_DEBUG, "Logged out...");
-            userInfoTextView.setVisibility(View.INVISIBLE);
-            lbServiceResult.setVisibility(View.INVISIBLE);
+
+            Session currentSession = SingletonSession.getInstance().getCurrentSession();
+            currentSession.closeAndClearTokenInformation();
+
+            /*userInfoTextView.setVisibility(View.INVISIBLE);
+            lbServiceResult.setVisibility(View.INVISIBLE);*/
         }
-    }
-
-
-
-    private String buildUserInfoDisplay(GraphUser user) {
-        StringBuilder userInfo = new StringBuilder("");
-
-        Log.d("user",user.toString());
-        int a =5 ;
-        // Example: typed access (name)
-        // - no special permissions required
-        userInfo.append(String.format("Name: %s\n\n",
-                user.getName()));
-
-        // Example: typed access (birthday)
-        // - requires user_birthday permission
-       userInfo.append(String.format("Birthday: %s\n\n",
-                user.getBirthday()));
-
-        // Example: partially typed access, to location field,
-        // name key (location)
-        // - requires user_location permission
-        userInfo.append(String.format("Location: %s\n\n",
-                user.getLocation() != null ? user.getLocation().getProperty("name") : "No location"));
-
-        // Example: access via property name (locale)
-        // - no special permissions required
-        userInfo.append(String.format("Locale: %s\n\n",
-                user.getProperty("locale")));
-
-        // Example: access via key for array (languages)
-        // - requires user_likes permission
-        JSONArray languages = (JSONArray)user.getProperty("languages");
-        if (languages!=null) {
-            if (languages.length() > 0) {
-                ArrayList<String> languageNames = new ArrayList<String>();
-                for (int i = 0; i < languages.length(); i++) {
-                    JSONObject language = languages.optJSONObject(i);
-                    // Add the language name to a list. Use JSON
-                    // methods to get access to the name field.
-                    languageNames.add(language.optString("name"));
-                }
-                userInfo.append(String.format("Languages: %s\n\n",
-                        languageNames.toString()));
-            }
-        }
-        return userInfo.toString();
     }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {

@@ -24,8 +24,8 @@ import com.mentormate.academy.fbpartyapp.Utils.Constants;
                 Constants.DB_NAME + " TEXT, " +
                 Constants.DB_DESCRIPTION + " TEXT, " +
                 Constants.DB_COVER + " TEXT, " +
-                Constants.DB_LAT + " REAL, " +
-                Constants.DB_LON + " REAL" +
+                Constants.DB_LAT + " TEXT, " +
+                Constants.DB_LON + " TEXT" +
             " );"
             ;
 

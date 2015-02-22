@@ -49,10 +49,6 @@ public class MainActivity extends FragmentActivity {
 
         }
 
-
-//        registerReceiver(receiver,
-//                new IntentFilter(PartiesDownloadService.BROADCAST_RESULT));
-
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
             facebookLoginFragment = new FacebookLoginFragment();
@@ -61,17 +57,6 @@ public class MainActivity extends FragmentActivity {
                     .add(android.R.id.content, facebookLoginFragment)
                     .commit();
 
-//            loginBtn = (LoginButton) findViewById(R.id.authButton);
-//            loginBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-//                @Override
-//                public void onUserInfoFetched(GraphUser user) {
-//                    if (user != null) {
-//                        Log.d(Constants .LOG_DEBUG,"Hello, " + user.getName());
-//                    } else {
-//                        Log.d(Constants .LOG_DEBUG,"You are not logged");
-//                    }
-//                }
-//            });
         } else {
             // Or set the fragment from restored state info
             facebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()

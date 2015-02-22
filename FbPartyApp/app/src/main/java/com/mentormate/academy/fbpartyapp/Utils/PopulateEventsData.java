@@ -239,8 +239,8 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
 
                             if( venue.has("latitude") && venue.has("longitude"))
                             {
-                                values.put(Constants.DB_LAT, venue.getString("latitude"));
-                                values.put(Constants.DB_LON, venue.getString("longitude"));
+                                values.put(Constants.DB_LAT, venue.getDouble("latitude"));
+                                values.put(Constants.DB_LON, venue.getDouble("longitude"));
                             }
 
                         } catch (JSONException e) {

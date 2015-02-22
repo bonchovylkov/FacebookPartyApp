@@ -57,8 +57,10 @@ public class TodayEventsFragment extends ListFragment {
         //  setListAdapter(new MovieAdapter(this.getActivity(),selectedCinemaIndex));
 
         listAdapter = new TodayEventsAdapter(getActivity());
-        // Populate list with all the cinemas that the adapted has
-        setListAdapter(listAdapter);
+        if(listAdapter.getCount() > 0) {
+            // Populate list with all the cinemas that the adapted has
+            setListAdapter(listAdapter);
+        }
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 

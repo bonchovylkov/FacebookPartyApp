@@ -11,21 +11,24 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 import com.facebook.Session;
+import com.facebook.widget.LoginButton;
 import com.mentormate.academy.fbpartyapp.Fragments.AllEventsFragment;
 import com.mentormate.academy.fbpartyapp.Fragments.TodayEventsFragment;
 import com.mentormate.academy.fbpartyapp.Services.EventsDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
-import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
 
-public class Parties extends FragmentActivity {
+public class Parties extends FragmentActivity implements View.OnClickListener {
 
     private Session session;
-
+    boolean isReceiverRegistered = false;
     private ActionBar actionBar;
+
+    LoginButton fbAuthButton;
 
     ActionBar.Tab tabTodayEvents;
     ActionBar.Tab tabAllEvents;
@@ -36,10 +39,11 @@ public class Parties extends FragmentActivity {
             if (intent.hasExtra(EventsDownloadService.KEY_MESSAGE)) {
                 Log.d(Constants.LOG_DEBUG, "broadcast result: " + intent.getIntExtra(EventsDownloadService.KEY_MESSAGE, 0));
 
+                //refresh fragment views
                 todayEventsFragment.refresh(getApplicationContext());
                 allEventsFragment.refresh(getApplicationContext());
 
-                actionBar.setSelectedNavigationItem(1);
+
             }
         }
     };
@@ -49,49 +53,33 @@ public class Parties extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //check session
-        session = SingletonSession.getInstance().getCurrentSession();
-        if(session == null || !session.isOpened())
-        {
-            //we should be here only with an active session
-            //Go back to main activity
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
-        }
-
         //delete DB
-//        int count = getContentResolver().delete(Constants.URI, null, null);
-//        Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
+        //int count = getContentResolver().delete(Constants.URI, null, null);
+        //Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
 
-        //download events info
-        Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
-        eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
-        startService(eventsDownloadIntent);
+        Intent callingIntent = getIntent();
+        if(callingIntent.hasExtra(Constants.INITIAL_STARTUP) &&
+            callingIntent.getIntExtra(Constants.INITIAL_STARTUP, 0) == 1) {
+            Log.d(Constants.LOG_DEBUG, "starting events download service");
 
+            //download events info
+            Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
+            eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
+            startService(eventsDownloadIntent);
+        }
 
         //register receiver
         registerReceiver(receiver,
                 new IntentFilter(EventsDownloadService.BROADCAST_RESULT));
+        isReceiverRegistered = true;
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_events_main);
         setTabs();
 
-        /*if (savedInstanceState == null) {
-            // Add the fragment on initial activity setup
-            facebookLoginFragment = new FacebookLoginFragment(getBaseContext());
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(android.R.id.content, facebookLoginFragment)
-                    .commit();
-
-        } else {
-            // Or set the fragment from restored state info
-            facebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()
-                    .findFragmentById(android.R.id.content);
-        }*/
-
+        fbAuthButton = (LoginButton) findViewById(R.id.fbAuthButton);
+        fbAuthButton.setOnClickListener(this);
     }
 
     private void setTabs() {
@@ -106,15 +94,7 @@ public class Parties extends FragmentActivity {
         tabTodayEvents.setTabListener(new ActionBar.TabListener() {
             @Override
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
                 fragmentTransaction.replace(R.id.tabsLayout, todayEventsFragment);
-
-
-                //  FrameLayout layout =(FrameLayout) findViewById( R.id.mainLayout);
-                //  FrameLayout listCinemas = (FrameLayout)  layout.findViewById(R.id.cinemasLayout);
-
-                //  listCinemas.setVisibility(View.VISIBLE);
-
             }
 
             @Override
@@ -135,13 +115,8 @@ public class Parties extends FragmentActivity {
         tabAllEvents.setTabListener(new ActionBar.TabListener() {
             @Override
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-
                 fragmentTransaction.replace(R.id.tabsLayout, allEventsFragment);
-
-
                 Log.d(Constants.LOG_DEBUG, String.valueOf(todayEventsFragment.getmCurCheckPosition()));
-
             }
 
             @Override
@@ -158,12 +133,31 @@ public class Parties extends FragmentActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if(receiver!=null) {
-            unregisterReceiver(receiver);
-        }
+    protected void onResume() {
+        super.onResume();
+
+        //register receiver
+        registerReceiver(receiver,
+                new IntentFilter(EventsDownloadService.BROADCAST_RESULT));
+        isReceiverRegistered = true;
     }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        if(isReceiverRegistered && receiver!=null) {
+//            unregisterReceiver(receiver);
+//        }
+//    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        if(isReceiverRegistered && receiver!=null) {
+//            unregisterReceiver(receiver);
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,5 +179,42 @@ public class Parties extends FragmentActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.fbAuthButton:
+                callFacebookLogout(this);
+                break;
+        }
+    }
+
+    /**
+     * Logout From Facebook
+     */
+    public void callFacebookLogout(Context context) {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+
+                //clear your preferences if saved
+            }
+        } else {
+
+            session = new Session(context);
+            Session.setActiveSession(session);
+
+            session.closeAndClearTokenInformation();
+
+
+            //clear your preferences if saved
+
+        }
+        Log.d(Constants.LOG_DEBUG, "callFacebookLogout");
+        Intent mainActivity = new Intent(this, MainActivity.class);
+        startActivity(mainActivity);
     }
 }

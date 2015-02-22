@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.R;
@@ -30,17 +29,12 @@ public class TodayEventsAdapter extends BaseAdapter {
 
         this.context = context;
         Cursor c =  context.getContentResolver().query(Uri.withAppendedPath(Constants.URI, "events_today"), null, null, null, "");
-        String result = "Results:";
         if (!c.moveToFirst()) {
-
-            Toast.makeText(context, result + " no content yet!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, result + " no content yet!", Toast.LENGTH_LONG).show();
         } else {
             do{
                 Event event = BaseHelper.setEventData(c);
-
                 list.add(event);
-
-
             } while (c.moveToNext());
             //Toast.makeText(this, result, Toast.LENGTH_LONG).show();
         }

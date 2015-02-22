@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.Settings;
 import com.facebook.widget.LikeView;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -38,16 +39,33 @@ public class EventDetails extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
 
-        setUpMapIfNeeded();
-
+        //get event
         Intent intent = getIntent();
         event = (Event)intent.getSerializableExtra(Constants.INTENT_EVENT_EXTRA_PARAM);
 
+        //get event lat/lng
+        eventLat = event.getLat();
+        eventLng = event.getLng();
+        Log.d(Constants.LOG_DEBUG, "EventDetails lat lng: " + this.eventLat + " " + this.eventLng);
+        if(eventLng != null && !eventLng.equals("") && eventLat != null && !eventLat.equals(""))
+        {
+            location = new LatLng(
+                    Double.parseDouble(eventLat),
+                    Double.parseDouble(eventLng)
+            );
+            Log.d(Constants.LOG_DEBUG, "EventDetails location: " + location.toString());
+        }
+
+        //set up map
+        setUpMapIfNeeded();
+
+        //init FB sdk for LIkKE button
         Settings.sdkInitialize(this);
 
         LikeView likeView = (LikeView) findViewById(R.id.like_view);
         likeView.setObjectId("http://www.facebook.com/"+Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID);
 
+        //populate event data
         lbEventDescription =(TextView) findViewById(R.id.lbEventDescription);
         lbEventStartTime =(TextView) findViewById(R.id.lbEventStartTime);
         lbEventName =(TextView) findViewById(R.id.lbEventName);
@@ -57,19 +75,6 @@ public class EventDetails extends FragmentActivity {
         lbEventStartTime.setText(event.getStartTime());
         lbEventName.setText(event.getName());
         Picasso.with(this).load(event.getCoverSource()).into(eventImage);
-
-        eventLat = event.getLat();
-        eventLng = event.getLng();
-        Log.d(Constants.LOG_DEBUG, "EventDetails lat lng: " + this.eventLat + " " + this.eventLng);
-
-        if(eventLng != null && !eventLng.equals("") && eventLat != null && !eventLat.equals(""))
-        {
-            location = new LatLng(
-                Double.parseDouble(eventLat),
-                Double.parseDouble(eventLng)
-            );
-            Log.d(Constants.LOG_DEBUG, "EventDetails location: " + location.toString());
-        }
     }
 
 
@@ -97,16 +102,18 @@ public class EventDetails extends FragmentActivity {
 
         if(location != null)
         {
-            Log.d(Constants.LOG_DEBUG, location.toString());
+            Log.d(Constants.LOG_DEBUG, "location to string: " + location.toString());
 
             //ANIMATE CAMERA
-            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));
+
             //42.6931,23.3225
 
             // ADD MARKERS
             mMap.addMarker(new MarkerOptions()
                 .position(location)
-                .title(event.getName())
+                .title(event.getName() + "\n" + event.getStartTime())
+                .snippet(event.getStartTime())
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .alpha(0.7f)
             );
@@ -129,7 +136,10 @@ public class EventDetails extends FragmentActivity {
             startActivity(mapIntent);
             */
         }
-
+        else
+        {
+            Log.d(Constants.LOG_DEBUG, "Missing location ....");
+        }
 
     }
 
