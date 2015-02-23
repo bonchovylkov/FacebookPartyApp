@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.R;
@@ -32,7 +31,7 @@ public class AllEventsAdapter extends BaseAdapter {
         String result = "Results:";
         if (!c.moveToFirst()) {
 
-             Toast.makeText(context, result + " no content yet!", Toast.LENGTH_LONG).show();
+             //Toast.makeText(context, result + " no content yet!", Toast.LENGTH_LONG).show();
         } else {
             do{
                 Event event = BaseHelper.setEventData(c);
