@@ -2,10 +2,13 @@ package com.mentormate.academy.fbpartyapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
+import com.mentormate.academy.fbpartyapp.Utils.UIExtentions.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 
 
@@ -29,11 +33,16 @@ public class EventDetails extends FragmentActivity {
     private TextView lbEventName,lbEventStartTime, lbEventDescription;
     private ImageView eventImage;
 
+    private ExpandableTextView expTestView;
     private String eventLat, eventLng;
     private LatLng location;
+    Button btnMoreOrLess;
     Event event;
 
+    private String originalDescription;
+    private String trimmedDescription;
 
+//1001235509904524/attending
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,15 +72,31 @@ public class EventDetails extends FragmentActivity {
         Settings.sdkInitialize(this);
 
         LikeView likeView = (LikeView) findViewById(R.id.like_view);
-        likeView.setObjectId("http://www.facebook.com/"+Constants.FB_PAGE_WHERE_IS_THE_PARTY_ID);
+        likeView.setObjectId("http://www.facebook.com/"+event.getEventId());
 
+        expTestView = (ExpandableTextView) findViewById(R.id.lbExpandableDescription) ;
         //populate event data
         lbEventDescription =(TextView) findViewById(R.id.lbEventDescription);
         lbEventStartTime =(TextView) findViewById(R.id.lbEventStartTime);
         lbEventName =(TextView) findViewById(R.id.lbEventName);
         eventImage =  (ImageView)findViewById(R.id.eventImage);
+        btnMoreOrLess =  (Button)findViewById(R.id.btnMoreLess);
 
-        lbEventDescription.setText(event.getDescription());
+        originalDescription =  event.getDescription()!=null? event.getDescription():"";
+
+        if (originalDescription.length()>500){
+            trimmedDescription =originalDescription.substring(0,500);
+            lbEventDescription.setText(trimmedDescription);
+        }else{
+            lbEventDescription.setText(originalDescription);
+            btnMoreOrLess.setVisibility( View.INVISIBLE);
+        }
+
+
+
+
+        //expTestView.setText(event.getDescription());
+
         lbEventStartTime.setText(event.getStartTime());
         lbEventName.setText(event.getName());
         Picasso.with(this).load(event.getCoverSource()).into(eventImage);
@@ -167,6 +192,24 @@ Log.d(Constants.LOG_DEBUG,"onActivityResult:" + requestCode + " " + resultCode);
         // if you don't use the UiLifecycleHelper, call handleOnActivityResult on the LikeView instead
          LikeView.handleOnActivityResult(this, requestCode, resultCode, data);
 
+    }
+
+    public void ShowMoreOrLess(View view) {
+        Button btn = (Button)view.findViewById(R.id.btnMoreLess);
+        if (btn.getText().equals("More...")){
+            lbEventDescription.setText(originalDescription);
+            btn.setText("Less...");
+        }else{
+            lbEventDescription.setText(trimmedDescription);
+            btn.setText("More...");
+        }
+
+    }
+
+    public void showPeopleAttending(View view) {
+        Intent intent = new Intent(this, PeopleAttending.class);
+        intent.putExtra(Constants.INTENT_EVENT_EXTRA_PARAM, event);
+        startActivity(intent);
     }
 
 

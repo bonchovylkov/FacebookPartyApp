@@ -40,12 +40,28 @@
         android:textAlignment="textEnd"
         android:gravity="end" />
 
-    <TextView  android:text="Description" android:layout_width="wrap_content"
-        android:id="@+id/lbEventDescription"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lbEventStartTime"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+
+            <com.mentormate.academy.fbpartyapp.Utils.UIExtentions.ExpandableTextView
+                android:id="@+id/lbExpandableDescription"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                />
+
+                    <TextView  android:text="Description" android:layout_width="wrap_content"
+                        android:id="@+id/lbEventDescription"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lbEventStartTime"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+            <Button  android:text="More..." android:layout_width="wrap_content"
+                android:id="@+id/btnMoreLess"
+                android:layout_height="wrap_content"
+                android:onClick="ShowMoreOrLess"
+                android:layout_below="@+id/lbEventDescription"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
 
 
@@ -54,11 +70,17 @@
                 android:layout_height="200dp" android:id="@+id/map" tools:context=".EventDetails"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <com.facebook.widget.LikeView android:id="@+id/like_view" android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <com.facebook.widget.LikeView android:id="@+id/like_view" android:layout_width="match_parent" android:layout_gravity="left" android:layout_height="wrap_content"
         android:layout_below="@+id/lbEventDescription"
         android:layout_marginTop="29dp"
         />
 
+            <Button  android:text="People attenting" android:layout_width="wrap_content"
+                android:id="@+id/btnAttending"
+                android:layout_height="wrap_content"
+                android:onClick="showPeopleAttending"
+
+                 />
 
         </LinearLayout>
     </ScrollView>
