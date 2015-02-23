@@ -2,6 +2,7 @@ package com.mentormate.academy.fbpartyapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -41,7 +42,7 @@ public class EventDetails extends FragmentActivity {
     private String originalDescription;
     private String trimmedDescription;
 
-
+//1001235509904524/attending
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,6 +204,12 @@ Log.d(Constants.LOG_DEBUG,"onActivityResult:" + requestCode + " " + resultCode);
             btn.setText("More...");
         }
 
+    }
+
+    public void showPeopleAttending(View view) {
+        Intent intent = new Intent(this, PeopleAttending.class);
+        intent.putExtra(Constants.INTENT_EVENT_EXTRA_PARAM, event);
+        startActivity(intent);
     }
 
 
