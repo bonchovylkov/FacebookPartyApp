@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.mentormate.academy.fbpartyapp.Models.PersonFB;
 import com.mentormate.academy.fbpartyapp.R;
 import com.mentormate.academy.fbpartyapp.Utils.BaseHelper;
+import com.mentormate.academy.fbpartyapp.Utils.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -75,7 +77,8 @@ public class PeopleAttendingAdapter extends BaseAdapter {
 
         personName.setText("" + BaseHelper.getSubstringByCount(p.getName(), 100));
 
-      //  Picasso.with(context).load(e.getCoverSource()).into(eventPicture);
+        Picasso.with(context).load(Constants.FB_PROFILE_PICTURE_FIRST_PART  + p.getIdFb()
+                +Constants.FB_PROFILE_PICTURE_SECOND_PART).into(personPicture);
 
         return convertView;
     }

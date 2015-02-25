@@ -10,6 +10,20 @@ public class PersonFB {
     private String picture;
     private int id;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getIdFb() {
+        return idFb;
+    }
+
+    public void setIdFb(String idFb) {
+        this.idFb = idFb;
+    }
+
+    private String idFb;
+
     public String getPersonFbId() {
         return personFbId;
     }
@@ -35,12 +49,7 @@ public class PersonFB {
     }
 
 
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }
