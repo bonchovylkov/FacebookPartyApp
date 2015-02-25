@@ -67,20 +67,20 @@ public class TodayEventsAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.event_row, parent, false);
             eventName = (TextView) convertView.findViewById(R.id.eventName);
-            eventPicture = (ImageView) convertView.findViewById(R.id.eventPicture);
-            startDate =  (TextView) convertView.findViewById(R.id.lbStartDate);
+            eventPicture = (ImageView) convertView.findViewById(R.id.partyPicture);
+            startDate =  (TextView) convertView.findViewById(R.id.lbStartTime);
 
             //it works faster with set tag
             convertView.setTag(R.id.eventName, eventName);
-            convertView.setTag(R.id.eventPicture, eventPicture);
-            convertView.setTag(R.id.lbStartDate, startDate);
+            convertView.setTag(R.id.partyPicture, eventPicture);
+            convertView.setTag(R.id.lbStartTime, startDate);
 
 
 
         } else {
             eventName = (TextView) convertView.getTag(R.id.eventName);
-            eventPicture = (ImageView) convertView.getTag(R.id.eventPicture);
-            startDate = (TextView) convertView.getTag(R.id.lbStartDate);
+            eventPicture = (ImageView) convertView.getTag(R.id.partyPicture);
+            startDate = (TextView) convertView.getTag(R.id.lbStartTime);
 
         }
 

@@ -1,8 +1,9 @@
 package com.mentormate.academy.fbpartyapp;
 
-import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,25 +15,28 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
+import com.mentormate.academy.fbpartyapp.CustomAdapters.PeopleAttendingAdapter;
+import com.mentormate.academy.fbpartyapp.Fragments.PeopleAttendingFragment;
 import com.mentormate.academy.fbpartyapp.Models.Event;
+import com.mentormate.academy.fbpartyapp.Models.PersonFB;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
-import com.mentormate.academy.fbpartyapp.Utils.PopulateEventsData;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
 
 
-public class PeopleAttending extends Activity {
+public class PeopleAttending extends FragmentActivity {
 
     Event event;
     TextView textView;
     private Session session;
+    PeopleAttendingFragment peopleAttendingFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_people_attending);
-        Intent intent = getIntent();
-        textView = (TextView) findViewById(R.id.lbAttendingPeople);
+        setContentView(R.layout.peope_attending);
+       Intent intent = getIntent();
+       // textView = (TextView) findViewById(R.id.lbAttendingPeople);
         session = SingletonSession.getInstance().getCurrentSession();
         event = (Event)intent.getSerializableExtra(Constants.INTENT_EVENT_EXTRA_PARAM);
         getRequestData(event.getEventId()+"/attending"  );
@@ -68,8 +72,26 @@ public class PeopleAttending extends Activity {
                 // Default message
                 if (graphObject != null) {
 
-                    textView.setText(graphObject.toString());
+                   // textView.setText(graphObject.toString());
 
+                    ArrayList<PersonFB> list = new ArrayList<PersonFB>();
+                    PersonFB p = new PersonFB();
+                    p.setName("Pehso");
+                    p.setId(1);
+                    list.add(p);
+
+                    PeopleAttendingAdapter adapter = new PeopleAttendingAdapter(getApplicationContext(), list);
+                    peopleAttendingFragment = new PeopleAttendingFragment(adapter);
+
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+                    transaction.replace(R.id.peopleAttendingViewFragment, peopleAttendingFragment);
+                    transaction.addToBackStack(null);
+
+// Commit the transaction
+                    transaction.commit();
 
                 } else if (error != null) {
                     textView.setText("graphObject=null");
