@@ -29,17 +29,11 @@ public class EventsDownloadService extends Service {
     public final static String BROADCAST_RESULT = "com.mentormate.academy.fbpartyapp.Services.BROADCAST_RESULT";
     public final static String KEY_MESSAGE = "events_downloaded";
 
+    private Context context;
 
     private Session session;
     private long lastUpdate = 0;
     private SharedPreferences sharedPreferences;
-    private String segmentOne, eventID;
-
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
 
     @Override
     public void onCreate() {
@@ -69,17 +63,20 @@ public class EventsDownloadService extends Service {
 
         Log.d(Constants.LOG_DEBUG, "after getRequestData");
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
-
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
     private void getRequestData(final String inRequestId) {
 
         //params -> ?since=<unix timestamp of last update>
         Bundle params = new Bundle();
         //TO DO -> remove after testing
-       // lastUpdate = 0;
+        lastUpdate = 0;
         if(lastUpdate != 0) {
             params.putString(Constants.FB_FEED_SINCE_PARAM, "" + lastUpdate);
         }

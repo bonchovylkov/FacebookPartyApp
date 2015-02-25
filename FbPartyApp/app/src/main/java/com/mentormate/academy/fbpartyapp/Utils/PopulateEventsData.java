@@ -1,5 +1,6 @@
 package com.mentormate.academy.fbpartyapp.Utils;
 
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.Patterns;
 
@@ -31,7 +33,7 @@ import java.util.regex.Pattern;
 /**
  * Created by ivaylokostov on 2/21/15.
  */
-public class PopulateEventsData extends AsyncTask<String, Void, String> {
+public class PopulateEventsData extends AsyncTask<String, Integer, String> {
 
     private Context context;
     private Pattern pattern = Pattern.compile("^https?://[^/]+/([^/]+)/([^/]+)/.*");
@@ -41,9 +43,14 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
     private String segmentOne, eventID;
     private int eventsFound = 0;
 
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
+    int id = 1;
+
     public PopulateEventsData(Context context)
     {
         this.context = context;
+        //Log.d(Constants.LOG_DEBUG, "context in populate events data: " + context.toString());
         session = SingletonSession.getInstance().getCurrentSession();
     }
 
@@ -66,11 +73,32 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
         Intent intent = new Intent(EventsDownloadService.BROADCAST_RESULT);
         intent.putExtra(EventsDownloadService.KEY_MESSAGE, eventsFound);
         context.sendBroadcast(intent);
+
+        mBuilder.setContentText("Searching complete!");
+        mBuilder.setSmallIcon(android.R.drawable.stat_sys_download_done);
+        // Removes the progress bar
+        mBuilder.setProgress(0, 0, false);
+        mNotifyManager.notify(id, mBuilder.build());
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
+    protected void onProgressUpdate(Integer... values) {
+        mBuilder.setProgress(100, values[0], false);
+        mNotifyManager.notify(id, mBuilder.build());
         super.onProgressUpdate(values);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        mNotifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(context);
+        mBuilder.setContentTitle("Looking for the best parties...")
+                .setContentText("Please wait a minute, while we find the best parties for today!")
+                .setSmallIcon(android.R.drawable.stat_sys_download);
+
+
     }
 
     private void parseFeedJson(String jsonString) {
@@ -91,7 +119,10 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
 
             data = feed.getJSONArray("data");
 
-            for (int i = 0; i < data.length(); i++) {
+            int data_length = data.length();
+            int progress = 0;
+
+            for (int i = 0; i < data_length; i++) {
                 post = data.getJSONObject(i);
 
                 //post debug
@@ -112,7 +143,8 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
 
 
                     }
-
+                    progress += 100 / data_length;
+                    publishProgress(progress);
                 }
             }
 
@@ -278,4 +310,6 @@ public class PopulateEventsData extends AsyncTask<String, Void, String> {
         Request.executeAndWait(request);
 
     }
+
+
 }

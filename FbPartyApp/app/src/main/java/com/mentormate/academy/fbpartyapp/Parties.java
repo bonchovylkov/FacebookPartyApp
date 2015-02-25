@@ -1,7 +1,9 @@
 package com.mentormate.academy.fbpartyapp;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +23,15 @@ import com.mentormate.academy.fbpartyapp.Fragments.TodayEventsFragment;
 import com.mentormate.academy.fbpartyapp.Services.EventsDownloadService;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 
+import java.util.Calendar;
+
 
 public class Parties extends FragmentActivity implements View.OnClickListener {
 
-    private Session session;
     boolean isReceiverRegistered = false;
     private ActionBar actionBar;
+    private PendingIntent pintent;
+    private AlarmManager alarmManager;
 
     LoginButton fbAuthButton;
 
@@ -57,16 +62,25 @@ public class Parties extends FragmentActivity implements View.OnClickListener {
         //int count = getContentResolver().delete(Constants.URI, null, null);
         //Log.d(Constants.LOG_DEBUG, "Deleted " + count + " events.");
 
-        Intent callingIntent = getIntent();
+        //start service manually
+        /*Intent callingIntent = getIntent();
         if(callingIntent.hasExtra(Constants.INITIAL_STARTUP) &&
             callingIntent.getIntExtra(Constants.INITIAL_STARTUP, 0) == 1) {
             Log.d(Constants.LOG_DEBUG, "starting events download service");
 
             //download events info
             Intent eventsDownloadIntent = new Intent(this, EventsDownloadService.class);
-            eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
+            //eventsDownloadIntent.setAction(EventsDownloadService.ACTION_ASYNC);
             startService(eventsDownloadIntent);
-        }
+        }*/
+
+        //set Alarm -> call service every 1 hour
+        Calendar cal = Calendar.getInstance();
+        Intent intent = new Intent(Parties.this, EventsDownloadService.class);
+        pintent = PendingIntent.getService(Parties.this, 0, intent, 0);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 60 * 60 * 1000, pintent);
+        Log.d(Constants.LOG_DEBUG, "alarm: " + alarmManager.toString());
 
         //register receiver
         registerReceiver(receiver,
@@ -158,6 +172,19 @@ public class Parties extends FragmentActivity implements View.OnClickListener {
 //            unregisterReceiver(receiver);
 //        }
 //    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        if(pintent != null && alarmManager != null)
+        {
+            Log.d(Constants.LOG_DEBUG, "cancelling alarm...");
+            alarmManager.cancel(pintent);
+        }
+
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
