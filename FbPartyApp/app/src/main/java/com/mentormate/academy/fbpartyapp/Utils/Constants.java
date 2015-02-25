@@ -43,7 +43,7 @@ public class Constants {
 
     public static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static String FB_PROFILE_PICTURE_FIRST_PART = "http://graph.facebook.com/";
+    public static String FB_PROFILE_PICTURE_FIRST_PART = "https://graph.facebook.com/";
 
     public static String FB_PROFILE_PICTURE_SECOND_PART = "/picture?type=square";
 

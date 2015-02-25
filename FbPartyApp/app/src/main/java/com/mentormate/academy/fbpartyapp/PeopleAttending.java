@@ -104,16 +104,16 @@ public class PeopleAttending extends FragmentActivity {
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back stack
                     transaction.replace(R.id.peopleAttendingViewFragment, peopleAttendingFragment);
                     transaction.addToBackStack(null);
 
-// Commit the transaction
+                // Commit the transaction
                     transaction.commit();
 
                 } else if (error != null) {
-                    textView.setText("graphObject=null");
+                    
                     Log.d(Constants.LOG_DEBUG, "graphObject is null!");
 
                 }
