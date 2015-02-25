@@ -113,7 +113,7 @@ public class PeopleAttending extends FragmentActivity {
                     transaction.commit();
 
                 } else if (error != null) {
-                    
+
                     Log.d(Constants.LOG_DEBUG, "graphObject is null!");
 
                 }

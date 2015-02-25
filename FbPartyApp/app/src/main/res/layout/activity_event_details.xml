@@ -57,8 +57,12 @@
 
             <Button  android:text="More..." android:layout_width="wrap_content"
                 android:id="@+id/btnMoreLess"
+                android:background="#4A62BA"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
                 android:layout_height="wrap_content"
                 android:onClick="ShowMoreOrLess"
+                android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/lbEventDescription"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
@@ -70,17 +74,36 @@
                 android:layout_height="200dp" android:id="@+id/map" tools:context=".EventDetails"
                 android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <com.facebook.widget.LikeView android:id="@+id/like_view" android:layout_width="match_parent" android:layout_gravity="left" android:layout_height="wrap_content"
-        android:layout_below="@+id/lbEventDescription"
-        android:layout_marginTop="29dp"
-        />
-
-            <Button  android:text="People attenting" android:layout_width="wrap_content"
-                android:id="@+id/btnAttending"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:onClick="showPeopleAttending"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+                <com.facebook.widget.LikeView
+                    android:id="@+id/like_view"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lbEventDescription"
+                    />
+                </LinearLayout>
 
-                 />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+                <Button  android:text="People attenting" android:layout_width="wrap_content"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:id="@+id/btnAttending"
+                    android:background="#4A62BA"
+                    android:layout_height="wrap_content"
+                    android:onClick="showPeopleAttending"
+                    />
+
+                </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -76,7 +76,7 @@ public class EventsDownloadService extends Service {
         //params -> ?since=<unix timestamp of last update>
         Bundle params = new Bundle();
         //TO DO -> remove after testing
-        lastUpdate = 1424860891;
+        //lastUpdate = 1424860891;
         if(lastUpdate != 0) {
             params.putString(Constants.FB_FEED_SINCE_PARAM, "" + lastUpdate);
         }
