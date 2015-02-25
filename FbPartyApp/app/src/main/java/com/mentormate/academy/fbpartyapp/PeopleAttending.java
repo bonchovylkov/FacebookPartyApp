@@ -22,6 +22,10 @@ import com.mentormate.academy.fbpartyapp.Models.PersonFB;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
 import com.mentormate.academy.fbpartyapp.Utils.SingletonSession;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -75,26 +79,41 @@ public class PeopleAttending extends FragmentActivity {
                    // textView.setText(graphObject.toString());
 
                     ArrayList<PersonFB> list = new ArrayList<PersonFB>();
-                    PersonFB p = new PersonFB();
-                    p.setName("Pehso");
-                    p.setId(1);
-                    list.add(p);
+
+                    JSONObject graphResult = graphObject.getInnerJSONObject();
+                    try {
+                        JSONArray data = graphResult.getJSONArray("data");
+                        for (int i =0;i<data.length();i++)
+                        {
+                            PersonFB newPerson = new PersonFB();
+                            JSONObject currentPerson = data.getJSONObject(i);
+                            newPerson.setId(i+1);
+                            newPerson.setIdFb(currentPerson.getString("id"));
+                            newPerson.setName(currentPerson.getString("name"));
+
+                            list.add(newPerson);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
 
                     PeopleAttendingAdapter adapter = new PeopleAttendingAdapter(getApplicationContext(), list);
                     peopleAttendingFragment = new PeopleAttendingFragment(adapter);
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back stack
                     transaction.replace(R.id.peopleAttendingViewFragment, peopleAttendingFragment);
                     transaction.addToBackStack(null);
 
-// Commit the transaction
+                // Commit the transaction
                     transaction.commit();
 
                 } else if (error != null) {
-                    textView.setText("graphObject=null");
+                    
                     Log.d(Constants.LOG_DEBUG, "graphObject is null!");
 
                 }
