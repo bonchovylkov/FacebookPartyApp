@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 public class PopulateEventsData extends AsyncTask<String, Integer, String> {
 
     private Context context;
-    private Pattern pattern = Pattern.compile("^https?://[^/]+/([^/]+)/([^/]+)/.*");
+    private Pattern pattern = Pattern.compile("^https?://[^/]+/([^/]+)/([^/]+)/?.*");
     //private DateFormat formatter = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
     private String datePattern = "yyyy-MM-dd'T'HH:mm:ssZ";
     private Session session;
@@ -164,18 +164,23 @@ public class PopulateEventsData extends AsyncTask<String, Integer, String> {
     private boolean checkCommentForEventLink(String message) {
         //valid url
         if (Patterns.WEB_URL.matcher(message).matches() ) {
+
+            Log.d(Constants.LOG_DEBUG, "message: " + message);
+
             //look for facebook.com/events
             Matcher matcher = pattern.matcher(message);
             if( matcher.matches() )
             {
                 //get first part of path -> should be equal to "events"
                 segmentOne = matcher.group(1);
+
+
                 if ( segmentOne.equals(Constants.EVENT_URI_SEGMENT) )
                 {
                     //if the first part is events -> the second is eventID!
                     eventID = matcher.group(2);
 
-                    //Log.d(Constants.LOG_DEBUG, "Message: " + message + " segmentOne: " + segmentOne + " eventID: " + eventID);
+                    Log.d(Constants.LOG_DEBUG, "Message: " + message + " segmentOne: " + segmentOne + " eventID: " + eventID);
 
                     //save in DB
 
@@ -187,17 +192,17 @@ public class PopulateEventsData extends AsyncTask<String, Integer, String> {
                         values.put(Constants.DB_EVENT_ID, eventID);
                         values.put(Constants.DB_URL, message);
 
-                        //Log.d(Constants.LOG_DEBUG, "addEvent values: " + values.toString());
+                        Log.d(Constants.LOG_DEBUG, "addEvent values: " + values.toString());
                         Uri uri = context.getContentResolver().insert(Constants.URI, values);
-                        //Log.d(Constants.LOG_DEBUG, "addEvent uri: " + uri.toString());
+                        Log.d(Constants.LOG_DEBUG, "addEvent uri: " + uri.toString());
 
                     }
                     else
                     {
                         Log.d(Constants.LOG_DEBUG, "event already in db : " + c.getString(c.getColumnIndex(Constants.DB_EVENT_ID)) + " " +  c.getString(c.getColumnIndex(Constants.DB_START_TIME)));
                     }
-                    updateEventData(eventID);
 
+                    updateEventData(eventID);
                     return true;
                 }
             }

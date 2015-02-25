@@ -49,7 +49,7 @@ public class EventsDownloadService extends Service {
         Log.d(Constants.LOG_DEBUG, "lastUpdate:" + lastUpdate);
 
         session = SingletonSession.getInstance().getCurrentSession();
-        Log.d(Constants.LOG_DEBUG, "session: " + session.toString());
+        //Log.d(Constants.LOG_DEBUG, "session: " + session.toString());
         if(session == null || !session.isOpened())
         {
             //we should be here only with an active session
@@ -76,7 +76,7 @@ public class EventsDownloadService extends Service {
         //params -> ?since=<unix timestamp of last update>
         Bundle params = new Bundle();
         //TO DO -> remove after testing
-        lastUpdate = 0;
+        lastUpdate = 1424860891;
         if(lastUpdate != 0) {
             params.putString(Constants.FB_FEED_SINCE_PARAM, "" + lastUpdate);
         }
@@ -102,6 +102,8 @@ public class EventsDownloadService extends Service {
 
                     PopulateEventsData populateEventsData = new PopulateEventsData(EventsDownloadService.this);
                     populateEventsData.execute(graphResult.toString());
+
+                    Log.d(Constants.LOG_DEBUG, "graphResult.toString(): " + graphResult.toString());
 
                     //set last update time
                     setLastUpdateTime();

@@ -91,9 +91,6 @@ public class Parties extends FragmentActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_events_main);
         setTabs();
-
-        fbAuthButton = (LoginButton) findViewById(R.id.fbAuthButton);
-        fbAuthButton.setOnClickListener(this);
     }
 
     private void setTabs() {
@@ -149,6 +146,13 @@ public class Parties extends FragmentActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+
+        LoginButton fbAuthButton = (LoginButton) findViewById(R.id.footerView);
+        Log.d(Constants.LOG_DEBUG, "fbAuthButton: " + fbAuthButton.toString());
+        //fbAuthButton = (LoginButton) includeView.findViewById(R.id.fbAuthButton);
+        fbAuthButton.setOnClickListener(this);
+
+        //fbAuthButton = (LoginButton) findViewById(R.id.fbAuthButton);
 
         //register receiver
         registerReceiver(receiver,
@@ -211,7 +215,7 @@ public class Parties extends FragmentActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.fbAuthButton:
+            case R.id.footerView:
                 callFacebookLogout(this);
                 break;
         }

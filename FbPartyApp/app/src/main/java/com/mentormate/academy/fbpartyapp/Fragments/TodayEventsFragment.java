@@ -72,9 +72,6 @@ public class TodayEventsFragment extends ListFragment {
     }
 
 
-
-
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

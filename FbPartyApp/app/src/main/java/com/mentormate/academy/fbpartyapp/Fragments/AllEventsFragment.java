@@ -11,7 +11,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.mentormate.academy.fbpartyapp.CustomAdapters.AllEventsAdapter;
-import com.mentormate.academy.fbpartyapp.CustomAdapters.TodayEventsAdapter;
 import com.mentormate.academy.fbpartyapp.EventDetails;
 import com.mentormate.academy.fbpartyapp.Models.Event;
 import com.mentormate.academy.fbpartyapp.Utils.Constants;
@@ -47,20 +46,13 @@ public class AllEventsFragment extends ListFragment  {
         // Populate list with all the cinemas that the adapted has
         setListAdapter(listAdapter);
 
-
-
         if (savedInstanceState != null) {
             // Restore last state for checked position.
             mCurCheckPosition = savedInstanceState.getInt("currentChoice", 0);
         }
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
     }
-
-
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
